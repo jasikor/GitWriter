@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitWriter", "GitWriter\GitW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{717E8DAC-946D-41CA-835D-AA3E52380D4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookModel", "BookModel\BookModel.csproj", "{CAACC81D-200A-4793-BFEA-58608C30AE5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{717E8DAC-946D-41CA-835D-AA3E52380D4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{717E8DAC-946D-41CA-835D-AA3E52380D4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{717E8DAC-946D-41CA-835D-AA3E52380D4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAACC81D-200A-4793-BFEA-58608C30AE5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAACC81D-200A-4793-BFEA-58608C30AE5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAACC81D-200A-4793-BFEA-58608C30AE5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAACC81D-200A-4793-BFEA-58608C30AE5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

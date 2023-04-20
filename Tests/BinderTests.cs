@@ -1,7 +1,12 @@
+
+using BookModel;
+using FluentAssertions;
+
 namespace Tests;
 
 public class BinderTests
 {
     [Fact]
-    public void Test1() { }
+    public void EmptyBinder_SuccessfullyCreated() => 
+        Binder.Create().Should().NotBeNull();
 }
