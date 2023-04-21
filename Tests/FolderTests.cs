@@ -21,8 +21,8 @@ public class FolderTests
             .Should().Be(1);
 
 
-    private static IEnumerable<BinderEntry> ToBinderEntryList(string act) =>
-        act.Select(a => new Folder(a.ToString()));
+    private static List<BinderEntry> ToBinderEntryList(string act) =>
+        act.Select(a => new BinderEntry(a.ToString())).ToList();
 
     [Theory]
     [InlineData("123", 1, "213")]
@@ -50,7 +50,7 @@ public class FolderTests
         Move(act, index, exp, FolderExt.MoveDown);
 
     private static AndConstraint<GenericCollectionAssertions<BinderEntry>> Move(string act, int index, string exp,
-        Func<IEnumerable<BinderEntry>, int, IEnumerable<BinderEntry>> f)
+        Func<List<BinderEntry>, int, List<BinderEntry>> f)
     {
         return f(ToBinderEntryList(act), index)
             .Should()
