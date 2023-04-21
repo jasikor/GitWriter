@@ -10,10 +10,12 @@ public static class FolderExt
     public static Folder Add(this Folder @this, BinderEntry entry) =>
         @this with {SubFolders = @this.SubFolders.Append(entry)};
 
-    public static IEnumerable<Folder> MoveUp(this IEnumerable<Folder> @this, int index) =>
-        @this.Swap(index - 1, index);
+    public static IEnumerable<BinderEntry> MoveUp(this IEnumerable<BinderEntry> @this, int index) =>
+        index > 0
+            ? @this.Swap(index - 1, index)
+            : @this;
 
-    public static IEnumerable<Folder> Swap(this IEnumerable<Folder> @this, int index1, int index2)
+    private static IEnumerable<BinderEntry> Swap(this IEnumerable<BinderEntry> @this, int index1, int index2)
     {
         var l = @this.ToList();
         (l[index1], l[index2]) = (l[index2], l[index1]);
