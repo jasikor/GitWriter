@@ -1,8 +1,10 @@
 ﻿namespace BookModel;
 
-public class Binder
+public record Binder
 {
-    private Binder() { }
+    private Binder() => Root = new("Root");
+
+    public Folder Root { get; }
 
     public static Binder Create() => new();
 }
