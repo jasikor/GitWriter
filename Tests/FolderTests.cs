@@ -35,6 +35,19 @@ public class FolderTests
     [InlineData("123", 0, "123")]
     public void MoveUp_Ignores_Index0(string act, int index, string exp) =>
         Move(act, index, exp, FolderExt.MoveUp);
+    
+    [Theory]
+    [InlineData("123", 0, "213")]
+    [InlineData("123", 1, "132")]
+    [InlineData("12", 0, "21")]
+    public void MoveDown_SwapsElements_WithCorrectData(string act, int index, string exp) =>
+        Move(act, index, exp, FolderExt.MoveDown);
+
+    [Theory]
+    [InlineData("123", 2, "123")]
+    [InlineData("1234", 3, "1234")]
+    public void MoveDown_Ignores_LastElement(string act, int index, string exp) =>
+        Move(act, index, exp, FolderExt.MoveDown);
 
     private static AndConstraint<GenericCollectionAssertions<BinderEntry>> Move(string act, int index, string exp,
         Func<IEnumerable<BinderEntry>, int, IEnumerable<BinderEntry>> f)

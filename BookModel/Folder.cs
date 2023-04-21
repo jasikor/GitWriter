@@ -15,6 +15,11 @@ public static class FolderExt
             ? @this.Swap(index - 1, index)
             : @this;
 
+    public static IEnumerable<BinderEntry> MoveDown(this IEnumerable<BinderEntry> @this, int index) =>
+        index < @this.Count() - 1
+            ? @this.Swap(index, index + 1)
+            : @this;
+
     private static IEnumerable<BinderEntry> Swap(this IEnumerable<BinderEntry> @this, int index1, int index2)
     {
         var l = @this.ToList();
