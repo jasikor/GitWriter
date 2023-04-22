@@ -11,7 +11,7 @@ public static class FolderExt
             : @this;
 
     public static ImmutableList<BinderEntry> MoveDown(this ImmutableList<BinderEntry> @this, int index) =>
-        index < @this.Count() - 1
+        index < @this.Count - 1
             ? @this.Swap(index, index + 1)
             : @this;
 
@@ -35,7 +35,7 @@ public static class FolderExt
 
     private static ImmutableList<BinderEntry> InsertOrAppend(this ImmutableList<BinderEntry> @this, int index,
         BinderEntry item) =>
-        index == @this.Count()
+        index == @this.Count
             ? @this.Add(item)
             : @this.Insert(index, item);
 
