@@ -6,7 +6,7 @@ using FluentAssertions.Collections;
 
 namespace Tests;
 
-public class FolderTests
+public class FolderExtTests
 {
     [Theory]
     [InlineData("Title")]
