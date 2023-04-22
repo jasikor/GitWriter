@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Collections.Immutable;
+using System.Runtime.InteropServices;
 using BookModel;
 using FluentAssertions;
 using FluentAssertions.Collections;
@@ -13,16 +14,8 @@ public class FolderTests
     public void Create_SuccessfullyCreates_EmptyFolder_WithTitle(string title) =>
         new Folder(title).Title.Should().Be(title);
 
-    [Fact]
-    public void Add_AddsItem() =>
-        new Folder()
-            .Add(new Folder())
-            .SubFolders.Count()
-            .Should().Be(1);
-
-
-    private static List<BinderEntry> ToBinderEntryList(string act) =>
-        act.Select(a => new BinderEntry(a.ToString())).ToList();
+    private static ImmutableList<BinderEntry> ToBinderEntryList(string act) =>
+        act.Select(a => new BinderEntry(a.ToString())).ToImmutableList();
 
     [Theory]
     [InlineData("123", 1, "213")]
@@ -50,10 +43,8 @@ public class FolderTests
         Move(act, index, exp, FolderExt.MoveDown);
 
     private static AndConstraint<GenericCollectionAssertions<BinderEntry>> Move(string act, int index, string exp,
-        Func<List<BinderEntry>, int, List<BinderEntry>> f)
-    {
-        return f(ToBinderEntryList(act), index)
+        Func<ImmutableList<BinderEntry>, int, ImmutableList<BinderEntry>> f) =>
+        f(ToBinderEntryList(act), index)
             .Should()
             .BeEquivalentTo(ToBinderEntryList(exp), o => o.IncludingInternalFields().WithStrictOrdering());
-    }
 }

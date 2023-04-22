@@ -1,29 +1,26 @@
-﻿namespace BookModel;
+﻿using System.Collections.Immutable;
+
+namespace BookModel;
 
 public record Folder(string Title = "(folder)") : BinderEntry(Title)
 {
-    public List<BinderEntry> SubFolders = new List<BinderEntry>();
+    public ImmutableList<BinderEntry> SubFolders = ImmutableList<BinderEntry>.Empty;
 }
 
 public static class FolderExt
 {
-    public static Folder Add(this Folder @this, BinderEntry entry) =>
-        @this with {SubFolders = @this.SubFolders.Append(entry).ToList()};
-
-    public static List<BinderEntry> MoveUp(this List<BinderEntry> @this, int index) =>
+    public static ImmutableList<BinderEntry> MoveUp(this ImmutableList<BinderEntry> @this, int index) =>
         index > 0
             ? @this.Swap(index - 1, index)
             : @this;
 
-    public static List<BinderEntry> MoveDown(this List<BinderEntry> @this, int index) =>
+    public static ImmutableList<BinderEntry> MoveDown(this ImmutableList<BinderEntry> @this, int index) =>
         index < @this.Count() - 1
             ? @this.Swap(index, index + 1)
             : @this;
 
-    private static List<BinderEntry> Swap(this List<BinderEntry> @this, int index1, int index2)
-    {
-        var l = @this;
-        (l[index1], l[index2]) = (l[index2], l[index1]);
-        return l;
-    }
+    private static ImmutableList<BinderEntry> Swap(this ImmutableList<BinderEntry> @this, int index1, int index2) =>
+        @this
+            .SetItem(index1, @this[index2])
+            .SetItem(index2, @this[index1]);
 }
