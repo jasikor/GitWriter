@@ -32,6 +32,20 @@ public class FolderExtTests
             .BeEquivalentTo(ToFolderWithSubfolder(expRoot, expSubfolder,subIndex),
                 o => o.IncludingInternalFields().WithStrictOrdering());
     }
+    
+    [Theory]
+    [InlineData("_12", "abc", 0, 1, "_2", "abc1")]
+    [InlineData("0_2", "abc", 1, 2, "0_", "abc2")]
+    public void Demote_WorksCorrectly(string root, string subfolder, int subIndex, int demotedIndex, string expRoot,
+        string expSubfolder)
+    {
+        ToFolderWithSubfolder(root, subfolder, subIndex)
+            .Demote(demotedIndex)
+            .Should()
+            .BeEquivalentTo(ToFolderWithSubfolder(expRoot, expSubfolder,subIndex),
+                o => o.IncludingInternalFields().WithStrictOrdering());
+    }
+
 
     private static ImmutableList<BinderEntry> ToFolderWithSubfolder(string root, string subfolder, int subIndex)
     {

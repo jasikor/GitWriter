@@ -16,16 +16,22 @@ public static class FolderExt
             : @this;
 
     public static ImmutableList<BinderEntry> Promote(this ImmutableList<BinderEntry> root, int subFolderIndex,
-        int promotedIndex)
-    {
-        return root[subFolderIndex] switch {
+        int promotedIndex) =>
+        root[subFolderIndex] switch {
             Folder sub =>
                 root
                     .SetItem(subFolderIndex, sub with {Items = sub.Items.RemoveAt(promotedIndex)})
                     .InsertOrAppend(subFolderIndex + 1, sub.Items[promotedIndex]),
             _ => throw new UnreachableException(),
         };
-    }
+
+    public static ImmutableList<BinderEntry> Demote(this ImmutableList<BinderEntry> root, int demotedIndex) =>
+        root[demotedIndex - 1] switch {
+            Folder sub =>
+                root.RemoveAt(demotedIndex)
+                    .SetItem(demotedIndex - 1, sub with {Items = sub.Items.Add(root[demotedIndex])}),
+            _ => throw new UnreachableException(),
+        };
 
     private static ImmutableList<BinderEntry> InsertOrAppend(this ImmutableList<BinderEntry> @this, int index,
         BinderEntry item) =>
