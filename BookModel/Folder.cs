@@ -1,10 +1,11 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 
 namespace BookModel;
 
 public record Folder(string Title = "(folder)") : BinderEntry(Title)
 {
-    public ImmutableList<BinderEntry> SubFolders = ImmutableList<BinderEntry>.Empty;
+    public ImmutableList<BinderEntry> Items = ImmutableList<BinderEntry>.Empty;
 }
 
 public static class FolderExt
@@ -18,6 +19,25 @@ public static class FolderExt
         index < @this.Count() - 1
             ? @this.Swap(index, index + 1)
             : @this;
+
+    public static ImmutableList<BinderEntry> Promote(this ImmutableList<BinderEntry> root, int subFolderIndex,
+        int promotedIndex)
+    {
+        return root[subFolderIndex] switch {
+            Folder sub =>
+                root
+                    .SetItem(subFolderIndex, sub with {Items = sub.Items.RemoveAt(promotedIndex)})
+                    .InsertOrAppend(subFolderIndex + 1, sub.Items[promotedIndex]),
+            _ => throw new UnreachableException(),
+        };
+    }
+
+    private static ImmutableList<BinderEntry> InsertOrAppend(this ImmutableList<BinderEntry> @this, int index,
+        BinderEntry item) =>
+        index == @this.Count()
+            ? @this.Add(item)
+            : @this.Insert(index, item);
+
 
     private static ImmutableList<BinderEntry> Swap(this ImmutableList<BinderEntry> @this, int index1, int index2) =>
         @this

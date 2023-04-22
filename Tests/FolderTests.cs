@@ -18,6 +18,28 @@ public class FolderTests
         act.Select(a => new BinderEntry(a.ToString())).ToImmutableList();
 
     [Theory]
+    [InlineData("_12", "abc", 0, 0, "_a12", "bc")]
+    [InlineData("_12", "abc", 0, 1, "_b12", "ac")]
+    [InlineData("_12", "abc", 0, 2, "_c12", "ac")]
+    [InlineData("0_2", "abc", 1, 0, "0_a2", "bc")]
+    [InlineData("01_", "abc", 2, 0, "01_a", "bc")]
+    public void Promote_WorksCorrectly(string root, string subfolder, int subIndex, int promotedIndex, string expRoot,
+        string expSubfolder)
+    {
+        ToFolderWithSubfolder(root, subfolder, subIndex)
+            .Promote(subIndex, promotedIndex)
+            .Should()
+            .BeEquivalentTo(ToFolderWithSubfolder(expRoot, expSubfolder,subIndex),
+                o => o.IncludingInternalFields().WithStrictOrdering());
+    }
+
+    private static ImmutableList<BinderEntry> ToFolderWithSubfolder(string root, string subfolder, int subIndex)
+    {
+        var s = new Folder("_") with {Items = ToBinderEntryList(subfolder)};
+        return ToBinderEntryList(root).SetItem(subIndex, s);
+    }
+
+    [Theory]
     [InlineData("123", 1, "213")]
     [InlineData("123", 2, "132")]
     [InlineData("12", 1, "21")]
@@ -28,7 +50,7 @@ public class FolderTests
     [InlineData("123", 0, "123")]
     public void MoveUp_Ignores_Index0(string act, int index, string exp) =>
         Move(act, index, exp, FolderExt.MoveUp);
-    
+
     [Theory]
     [InlineData("123", 0, "213")]
     [InlineData("123", 1, "132")]
