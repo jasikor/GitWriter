@@ -1,4 +1,4 @@
-﻿namespace BookModel;
+﻿namespace BookModel.Binder;
 
 public record Binder
 {

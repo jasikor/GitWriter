@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace BookModel;
+namespace BookModel.Binder;
 
 public record Folder(string Title = "(folder)") : BinderEntry(Title)
 {

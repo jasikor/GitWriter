@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics;
 
-namespace BookModel;
+namespace BookModel.Binder;
 
 public static class FolderExt
 {

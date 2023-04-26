@@ -1,4 +1,5 @@
 ﻿using BookModel;
+using BookModel.Binder;
 using FluentAssertions;
 
 namespace Tests;

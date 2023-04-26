@@ -1,4 +1,5 @@
 ﻿using BookModel;
+using BookModel.Document;
 using FluentAssertions;
 
 namespace Tests;
@@ -24,7 +25,7 @@ public class DocumentPersistanceTests
         var sut = new Document().Load(read);
 
         // Assert        
-        sut.Paragraphs.Should()
+        sut.Items.Should()
             .BeEquivalentTo(exp, o => o.IncludingInternalFields().WithStrictOrdering());
 
     }
