@@ -1,8 +1,7 @@
-﻿using BookModel;
-using BookModel.Binder;
+﻿using BookModel.Binder;
 using FluentAssertions;
 
-namespace Tests;
+namespace Tests.Binder;
 
 public class DocEntryTests
 {

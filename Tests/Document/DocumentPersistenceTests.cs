@@ -1,10 +1,9 @@
-﻿using BookModel;
-using BookModel.Document;
+﻿using BookModel.Document;
 using FluentAssertions;
 
-namespace Tests;
+namespace Tests.Document;
 
-public class DocumentPersistanceTests
+public class DocumentPersistenceTests
 {
     [Theory]
     [InlineData(0)]
@@ -22,7 +21,7 @@ public class DocumentPersistanceTests
         var exp = read()
             .Select(i => new Paragraph(){Line =  i.ToString()});
         // Act
-        var sut = new Document().Load(read);
+        var sut = new BookModel.Document.Document().Load(read);
 
         // Assert        
         sut.Items.Should()

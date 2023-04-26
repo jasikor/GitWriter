@@ -1,11 +1,9 @@
 ﻿using System.Collections.Immutable;
-using System.Runtime.InteropServices;
-using BookModel;
 using BookModel.Binder;
 using FluentAssertions;
 using FluentAssertions.Collections;
 
-namespace Tests;
+namespace Tests.Binder;
 
 public class FolderExtTests
 {
