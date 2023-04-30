@@ -4,5 +4,5 @@ namespace BookModel.Binder;
 
 public record Folder(string Title = "(folder)") : BinderEntry(Title)
 {
-    public ImmutableList<BinderEntry> Items = ImmutableList<BinderEntry>.Empty;
+    public ImmutableList<BinderEntry> Items { get; init; } = ImmutableList<BinderEntry>.Empty;
 }

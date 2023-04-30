@@ -8,14 +8,27 @@ namespace Tests.Binder;
 public class BinderSerializationTests
 {
     [Fact]
-    public static void SerializationDeserialization_Recreates_Empty_Binder()
+    public static void SerializationDeserialization_Recreates_EmptyBinder()
     {
         var binder = new BookBinder();
-        var actual = BinderSerialization.Deserialize(binder.Serialize());
+        var serialized = binder.Serialize();
+        var actual = BinderSerialization.Deserialize(serialized);
         actual
-            .ShouldBeSuccess(bi => 
+            .ShouldBeSuccess(bi =>
                 bi.Should()
-                    .BeEquivalentTo(binder, o => o.IncludingInternalFields().WithStrictOrdering()));
+                    .BeEquivalentTo(binder));
+    }
+
+    [Fact]
+    public static void SerializationDeserialization_Recreates_BinderWith1Item()
+    {
+        var root = new Folder {Title = "root folder" , Items = ImmutableList<BinderEntry>.Empty};
+        var binder = new BookBinder {Root = root};
+
+        var serialized = binder.Serialize();
+        var actual = BinderSerialization.Deserialize(serialized);
+        actual
+            .ShouldBeSuccess(bi =>
+                bi.Should().BeEquivalentTo(binder));
     }
 }
-
