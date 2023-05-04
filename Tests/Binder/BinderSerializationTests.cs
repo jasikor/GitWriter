@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using BookModel.Binder;
+﻿using BookModel.Binder;
 using FluentAssertions;
 using LanguageExt.UnitTesting;
 
@@ -22,9 +21,9 @@ public class BinderSerializationTests
     [Fact]
     public static void SerializationDeserialization_Recreates_BinderWith1Item()
     {
-        var root = new Folder {Title = "root folder" , Items = ImmutableList<BinderEntry>.Empty};
+        var root = new Folder("root folder");
         var binder = new BookBinder {Root = root};
-
+        
         var serialized = binder.Serialize();
         var actual = BinderSerialization.Deserialize(serialized);
         actual

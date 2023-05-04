@@ -12,5 +12,5 @@ public static class BinderSerialization
         JsonSerializer.Serialize(@this, new JsonSerializerOptions { WriteIndented = true });
 
     public static Try<BookBinder> Deserialize(string serialized) => 
-        () => JsonSerializer.Deserialize<BookBinder>(serialized);
+        () => JsonSerializer.Deserialize<BookBinder>(serialized)!;
 }
