@@ -1,6 +1,7 @@
 ﻿namespace BookModel.Binder;
 
-public record DocEntry(string Title="(document)") : BinderEntry(Title)
+public class DocEntry : BinderEntry
 {
     public Document.Document Document = new();
+    public DocEntry(string title) : base(title) { }
 }

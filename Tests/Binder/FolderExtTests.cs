@@ -13,8 +13,8 @@ public class FolderExtTests
     public void Create_SuccessfullyCreates_EmptyFolder_WithTitle(string title) =>
         new Folder(title).Title.Should().Be(title);
 
-    private static ImmutableList<BinderEntry> ToBinderEntryList(string act) =>
-        act.Select(a => new BinderEntry(a.ToString())).ToImmutableList();
+    private static IList<BinderEntry> ToBinderEntryList(string act) =>
+        act.Select(a => new BinderEntry(a.ToString())).ToList();
 
     [Theory]
     [InlineData("_12", "abc", 0, 0, "_a12", "bc")]
@@ -28,29 +28,30 @@ public class FolderExtTests
         ToFolderWithSubfolder(root, subfolder, subIndex)
             .Promote(subIndex, promotedIndex)
             .Should()
-            .BeEquivalentTo(ToFolderWithSubfolder(expRoot, expSubfolder,subIndex),
-                o => o.IncludingInternalFields().WithStrictOrdering());
+            .BeEquivalentTo(ToFolderWithSubfolder(expRoot, expSubfolder, subIndex));
     }
-    
+
     [Theory]
     [InlineData("_12", "abc", 0, 1, "_2", "abc1")]
+    [InlineData("_1", "abc", 0, 1, "_", "abc1")]
     [InlineData("0_2", "abc", 1, 2, "0_", "abc2")]
+    [InlineData("0_2", "", 1, 2, "0_", "2")]
     public void Demote_WorksCorrectly(string root, string subfolder, int subIndex, int demotedIndex, string expRoot,
-        string expSubfolder)
-    {
+        string expSubfolder) =>
         ToFolderWithSubfolder(root, subfolder, subIndex)
             .Demote(demotedIndex)
             .Should()
-            .BeEquivalentTo(ToFolderWithSubfolder(expRoot, expSubfolder,subIndex),
-                o => o.IncludingInternalFields().WithStrictOrdering());
-    }
+            .BeEquivalentTo(ToFolderWithSubfolder(expRoot, expSubfolder, subIndex));
 
-
-    private static ImmutableList<BinderEntry> ToFolderWithSubfolder(string root, string subfolder, int subIndex)
+    private static Folder ToFolderWithSubfolder(string root, string subfolder, int subIndex)
     {
-        var s = new Folder("_") with {Items = ToBinderEntryList(subfolder)};
-        return ToBinderEntryList(root).SetItem(subIndex, s);
+        var sub = ToFolder(subfolder);
+        var r = ToBinderEntryList(root);
+        r[subIndex] = sub;
+        return new Folder("_") {Items = r};
     }
+
+    private static Folder ToFolder(string subfolder) => new Folder("_") {Items = ToBinderEntryList(subfolder)};
 
     [Theory]
     [InlineData("123", 1, "213")]
@@ -77,9 +78,9 @@ public class FolderExtTests
     public void MoveDown_Ignores_LastElement(string act, int index, string exp) =>
         Move(act, index, exp, FolderExt.MoveDown);
 
-    private static AndConstraint<GenericCollectionAssertions<BinderEntry>> Move(string act, int index, string exp,
-        Func<ImmutableList<BinderEntry>, int, ImmutableList<BinderEntry>> f) =>
-        f(ToBinderEntryList(act), index)
+    private static void Move(string act, int index, string exp, Func<Folder, int, Folder> f) =>
+        f(ToFolder(act), index)
             .Should()
-            .BeEquivalentTo(ToBinderEntryList(exp), o => o.IncludingInternalFields().WithStrictOrdering());
+            .BeEquivalentTo(ToFolder(exp),
+                o => o.IncludingInternalFields().WithStrictOrdering());
 }

@@ -1,3 +1,7 @@
 ﻿namespace BookModel.Binder;
 
-public record BinderEntry(string Title);
+public class BinderEntry
+{
+    public BinderEntry(string title) => Title = title;
+    public string Title { get; set; } 
+}

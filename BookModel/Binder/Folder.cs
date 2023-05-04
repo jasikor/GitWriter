@@ -1,8 +1,7 @@
-﻿using System.Collections.Immutable;
+﻿namespace BookModel.Binder;
 
-namespace BookModel.Binder;
-
-public record Folder(string Title = "(folder)") : BinderEntry(Title)
+public class Folder : BinderEntry
 {
-    public ImmutableList<BinderEntry> Items { get; init; } = ImmutableList<BinderEntry>.Empty;
+    public IList<BinderEntry> Items { get; init; } = new List<BinderEntry>();
+    public Folder(string title) : base(title) { }
 }
