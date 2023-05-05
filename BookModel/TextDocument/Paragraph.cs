@@ -1,4 +1,4 @@
-﻿namespace BookModel.Document;
+﻿namespace BookModel.TextDocument;
 
 public record Paragraph : DocumentItem
 {

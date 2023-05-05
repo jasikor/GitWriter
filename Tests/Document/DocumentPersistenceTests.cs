@@ -1,4 +1,4 @@
-﻿using BookModel.Document;
+﻿using BookModel.TextDocument;
 using FluentAssertions;
 
 namespace Tests.Document;
@@ -21,7 +21,7 @@ public class DocumentPersistenceTests
         var exp = read()
             .Select(i => new Paragraph(){Line =  i.ToString()});
         // Act
-        var sut = new BookModel.Document.Document().Load(read);
+        var sut = new BookModel.TextDocument.Document().Load(read);
 
         // Assert        
         sut.Items.Should()

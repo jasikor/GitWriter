@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 
-namespace BookModel.Document;
+namespace BookModel.TextDocument;
 
 public record Document
 {
@@ -12,7 +12,7 @@ public static class DocumentPersistence
     public static Document Load(this Document @this, Func<IEnumerable<string>> readLines) =>
         @this with {Items = readLines().ToDocumentItem()};
 
-    private static ImmutableList<DocumentItem> ToDocumentItem(this IEnumerable<string> @this) =>
+    private static ImmutableList<DocumentItem> ToDocumentItem(this IEnumerable<string> lines) =>
         ImmutableList<DocumentItem>.Empty
-            .AddRange(@this.Select(l => new Paragraph {Line = l}));
+            .AddRange(lines.Select(l => new Paragraph {Line = l}));
 }

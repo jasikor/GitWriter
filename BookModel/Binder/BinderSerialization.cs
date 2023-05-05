@@ -1,8 +1,5 @@
-﻿using System.ComponentModel.Design.Serialization;
-using System.Text.Json;
-using BookModel.Document;
+﻿using System.Text.Json;
 using LanguageExt;
-using LanguageExt.Common;
 
 namespace BookModel.Binder;
 
