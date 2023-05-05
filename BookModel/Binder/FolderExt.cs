@@ -4,26 +4,26 @@ namespace BookModel.Binder;
 
 public static class FolderExt
 {
-    public static Folder MoveUp(this Folder @this, int index) =>
+    public static Folder MoveUp(this Folder folder, int index) =>
         index > 0
-            ? @this.Swap(index - 1, index)
-            : @this;
+            ? folder.Swap(index - 1, index)
+            : folder;
 
-    public static Folder MoveDown(this Folder @this, int index) =>
-        index < @this.Items.Count - 1
-            ? @this.Swap(index, index + 1)
-            : @this;
+    public static Folder MoveDown(this Folder folder, int index) =>
+        index < folder.Items.Count - 1
+            ? folder.Swap(index, index + 1)
+            : folder;
 
-    public static Folder Promote(this Folder root, int subFolderIndex,
+    public static Folder Promote(this Folder folder, int subFolderIndex,
         int promotedIndex)
     {
-        var item = RemoveItem(root, subFolderIndex, promotedIndex);
-        return root.InsertOrAppend(subFolderIndex, item);
+        var item = RemoveItem(folder, subFolderIndex, promotedIndex);
+        return folder.InsertOrAppend(subFolderIndex, item);
     }
 
-    private static BinderEntry RemoveItem(Folder root, int subFolderIndex, int promotedIndex)
+    private static BinderEntry RemoveItem(Folder folder, int subFolderIndex, int promotedIndex)
     {
-        if (root.Items[subFolderIndex] is Folder sub) {
+        if (folder.Items[subFolderIndex] is Folder sub) {
             var removed = sub.Items[promotedIndex];
             sub.Items.RemoveAt(promotedIndex);
             return removed;
@@ -32,30 +32,30 @@ public static class FolderExt
         throw new ArgumentException("Subfolder index should indicate Folder, but it is not.");
     }
 
-    private static Folder InsertOrAppend(this Folder @this, int index,
+    private static Folder InsertOrAppend(this Folder folder, int index,
         BinderEntry item)
     {
-        if (index == @this.Items.Count)
-            @this.Items.Add(item);
+        if (index == folder.Items.Count)
+            folder.Items.Add(item);
         else
-            @this.Items.Insert(index, item);
-        return @this;
+            folder.Items.Insert(index, item);
+        return folder;
     }
 
-    public static Folder Demote(this Folder root, int demotedIndex)
+    public static Folder Demote(this Folder folder, int demotedIndex)
     {
-        Folder sub = root.Items[demotedIndex - 1] as Folder
+        Folder sub = folder.Items[demotedIndex - 1] as Folder
                      ?? throw new ArgumentException(
                          "Demoted element should be directly under the Folder, but it is not.");
-        var item = root.Items[demotedIndex];
-        root.Items.RemoveAt(demotedIndex);
+        var item = folder.Items[demotedIndex];
+        folder.Items.RemoveAt(demotedIndex);
         sub.Items.Add(item);
-        return root;
+        return folder;
     }
 
-    private static Folder Swap(this Folder @this, int index1, int index2)
+    private static Folder Swap(this Folder folder, int index1, int index2)
     {
-        (@this.Items[index1], @this.Items[index2]) = (@this.Items[index2], @this.Items[index1]);
-        return @this;
+        (folder.Items[index1], folder.Items[index2]) = (folder.Items[index2], folder.Items[index1]);
+        return folder;
     }
 }
