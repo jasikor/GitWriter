@@ -21,15 +21,6 @@ public static class FolderExt
         return root.InsertOrAppend(subFolderIndex, item);
     }
 
-    public static Folder Demote(this Folder root, int demotedIndex)
-    {
-        Folder sub = root.Items[demotedIndex - 1] as Folder ?? throw new UnreachableException();
-        var item = root.Items[demotedIndex];
-        root.Items.RemoveAt(demotedIndex);
-        sub.Items.Add(item);
-        return root;
-    }
-
     private static BinderEntry RemoveItem(Folder root, int subFolderIndex, int promotedIndex)
     {
         if (root.Items[subFolderIndex] is Folder sub) {
@@ -38,7 +29,7 @@ public static class FolderExt
             return removed;
         }
 
-        throw new UnreachableException();
+        throw new ArgumentException("Subfolder index should indicate Folder, but it is not.");
     }
 
     private static Folder InsertOrAppend(this Folder @this, int index,
@@ -49,6 +40,17 @@ public static class FolderExt
         else
             @this.Items.Insert(index, item);
         return @this;
+    }
+
+    public static Folder Demote(this Folder root, int demotedIndex)
+    {
+        Folder sub = root.Items[demotedIndex - 1] as Folder
+                     ?? throw new ArgumentException(
+                         "Demoted element should be directly under the Folder, but it is not.");
+        var item = root.Items[demotedIndex];
+        root.Items.RemoveAt(demotedIndex);
+        sub.Items.Add(item);
+        return root;
     }
 
     private static Folder Swap(this Folder @this, int index1, int index2)
