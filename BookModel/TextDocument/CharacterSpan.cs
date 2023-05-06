@@ -3,7 +3,8 @@ using LanguageExt;
 
 namespace BookModel.TextDocument;
 
-public class DocumentItem
+public class CharacterSpan
 {
-    public Option<DocumentItemStyle> Style;
+    public string Characters;
+    public Option<CharacterStyle> Style;
 }

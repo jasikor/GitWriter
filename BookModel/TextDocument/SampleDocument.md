@@ -5,9 +5,9 @@ filename: document.md
 
 abstract:
 
-  We discussed programming concepts related to the C# language, including keywords,
+  We discussed **programming _concepts_** related to the C# language, including keywords,
   syntax, and semantics. We started by exploring the concept of keywords and their
-  importance in defining the syntax and semantics of a programming language. We then
+  importance in defining the [**syntax** and **semantics**](https://lmgtfy.app/?q=computer+programming "syntax and semantics") of a programming language. We then
   looked at the specific uses of the public and private keywords in C#, including their role
   in encapsulation, information hiding, and testability.
 
@@ -29,9 +29,9 @@ notes:
 
   We discussed several keywords related to C# programming, including:
 
-  * public and private.
+  * **public** and **private**.
 
-    We talked about how the public keyword can be used to make a member of a 
+    We talked about how the **public** keyword can be used to make a member of a 
     class accessible from outside the class, while the private keyword can be used to 
     hide members of a class from outside access. 
 

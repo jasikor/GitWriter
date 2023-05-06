@@ -29,4 +29,8 @@
       <ProjectReference Include="..\BookModel\BookModel.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Document" />
+    </ItemGroup>
+
 </Project>
