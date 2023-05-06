@@ -11,12 +11,7 @@ public class BinderSerializationTests
     public static void SerializationDeserialization_Recreates_EmptyBinder()
     {
         var binder = new BookBinder();
-        var serialized = binder.Serialize();
-        var actual = Deserialize(serialized);
-        actual
-            .ShouldBeSuccess(bi =>
-                bi.Should()
-                    .BeEquivalentTo(binder));
+        TestSerializeDeserialize(binder);
     }
 
     [Fact]
@@ -24,11 +19,15 @@ public class BinderSerializationTests
     {
         var root = new Folder("root folder");
         var binder = new BookBinder {Root = root};
-        
+
+        TestSerializeDeserialize(binder);
+    }
+
+    private static void TestSerializeDeserialize(BookBinder binder)
+    {
         var serialized = binder.Serialize();
         var actual = Deserialize(serialized);
-        actual
-            .ShouldBeSuccess(bi =>
+        actual.ShouldBeSuccess(bi =>
                 bi.Should().BeEquivalentTo(binder));
     }
 }
