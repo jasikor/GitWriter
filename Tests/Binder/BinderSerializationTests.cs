@@ -1,6 +1,7 @@
 ﻿using BookModel.Binder;
 using FluentAssertions;
 using LanguageExt.UnitTesting;
+using static BookModel.Binder.BinderSerialization;
 
 namespace Tests.Binder;
 
@@ -11,7 +12,7 @@ public class BinderSerializationTests
     {
         var binder = new BookBinder();
         var serialized = binder.Serialize();
-        var actual = BinderSerialization.Deserialize(serialized);
+        var actual = Deserialize(serialized);
         actual
             .ShouldBeSuccess(bi =>
                 bi.Should()
@@ -25,7 +26,7 @@ public class BinderSerializationTests
         var binder = new BookBinder {Root = root};
         
         var serialized = binder.Serialize();
-        var actual = BinderSerialization.Deserialize(serialized);
+        var actual = Deserialize(serialized);
         actual
             .ShouldBeSuccess(bi =>
                 bi.Should().BeEquivalentTo(binder));
