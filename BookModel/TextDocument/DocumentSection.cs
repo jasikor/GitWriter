@@ -3,7 +3,7 @@ using LanguageExt;
 
 namespace BookModel.TextDocument;
 
-public class DocumentItem
+public class DocumentSection
 {
-    public Option<DocumentItemStyle> Style;
+    public Option<DocumentSectionStyle> Style;
 }

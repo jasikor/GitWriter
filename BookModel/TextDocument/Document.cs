@@ -2,5 +2,5 @@
 
 public class Document
 {
-    public IList<DocumentItem> Items = new List<DocumentItem>();
+    public IList<DocumentSection> Items = new List<DocumentSection>();
 }

@@ -2,4 +2,13 @@
 
 namespace BookModel.TextDocument;
 
-public abstract class ListStyle : Style { }
+public enum ListType
+{
+    Numbered,
+    Bulleted
+}
+
+public abstract class ListStyle : Style
+{
+    public ListType Type;
+}
