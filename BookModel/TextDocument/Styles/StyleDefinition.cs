@@ -2,7 +2,7 @@
 
 namespace BookModel.TextDocument.Styles;
 
-public class StyleDefinition
+public abstract class StyleDefinition
 {
     public StyleId Id;
     public string Name { get; set; }

@@ -3,6 +3,6 @@ using LanguageExt;
 
 namespace BookModel.TextDocument;
 
-public class DocumentSection
+public abstract class DocumentSection
 {
 }
