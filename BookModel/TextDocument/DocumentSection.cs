@@ -5,5 +5,4 @@ namespace BookModel.TextDocument;
 
 public class DocumentSection
 {
-    public Option<DocumentSectionStyle> Style;
 }

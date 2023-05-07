@@ -1,11 +1,10 @@
-﻿using LanguageExt;
+﻿using BookModel.TextDocument.Styles;
+using LanguageExt;
 
 namespace BookModel.TextDocument;
-
-
 
 public class ListSection : DocumentSection
 {
     public IList<DocumentSection> Sections;
-    public Option<ListStyle> Style;
+    public Option<StyleId> StyleId;
 }
