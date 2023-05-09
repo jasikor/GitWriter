@@ -1,12 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Security.Cryptography;
 using System.Text;
 using BookModel.TextDocument;
 using BookModel.TextDocument.Styles;
-using LanguageExt.Common;
 
 namespace Sandbox;
 
@@ -74,8 +71,12 @@ public static class Program
         var res = new StringBuilder();
         
 
-        res.Append(RenderParagraph(list.FirstParagraph));
-        
+        res.Append(RenderFirstList(list.FirstParagraph));
+
+        if (list.Sections.Any()) {
+            FirstListStyle style = new FirstListStyle().ApplyStyleDefinition(list.FirstParagraph.Style);
+            res.Append($"<span>extra space {style.SpacingBelow}</span>");
+        }
         foreach (var section in list.Sections) {
             DocumentStyle style = new DocumentStyle().ApplyStyleDefinition(section.Style);
             res.Append(RenderDocSection(section, style));
@@ -93,6 +94,17 @@ public static class Program
     {
         var res = new StringBuilder();
         res.Append("<p style=\"margin: 0px\"> Paragraf: ");
+        foreach (var s in par.Spans)
+            res.Append(RenderSpan(s));
+
+        res.Append("</p>");
+        return res;
+    }
+    
+    private static StringBuilder RenderFirstList(FirstListElement par)
+    {
+        var res = new StringBuilder();
+        res.Append("<p style=\"margin: 0px\"> FirstLine: ");
         foreach (var s in par.Spans)
             res.Append(RenderSpan(s));
 

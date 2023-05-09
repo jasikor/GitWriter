@@ -2,10 +2,8 @@
 
 namespace BookModel.TextDocument.Styles;
 
-public class DocumentSectionStyleDefinition : StyleDefinition
+public class FirstListStyleDefinition
 {
-    public Option<float> SpacingAbove;
     public Option<float> SpacingBelow;
     
 }
-
