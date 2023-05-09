@@ -21,7 +21,7 @@ public static class Program
         res.Append(Render(doc));
         res.Append("</body></html>");
         Console.WriteLine(res);
-        File.WriteAllText(@"d:\nic\gupie.html", res.ToString());
+        File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\gupie.html", res.ToString());
         return 0;
     }
 
