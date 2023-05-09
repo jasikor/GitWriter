@@ -5,6 +5,6 @@ namespace BookModel.TextDocument;
 
 public class ListSection : DocumentSection
 {
-    public IList<DocumentSection> Sections;
-    public Option<StyleId> StyleId;
+    public ParagraphSection FirstParagraph = new ParagraphSection();
+    public IList<DocumentSection> Sections = new List<DocumentSection>();
 }
