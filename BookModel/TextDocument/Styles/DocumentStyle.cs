@@ -6,12 +6,11 @@ public record DocumentStyle
     public float SpacingBelow;
 }
 
-
 public static class DocumentStyleExt
 {
-    public static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds, DocumentSectionStyleDefinition definition) =>
+    public static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds, VerticalSpacingStyleDefinition definition) =>
         ds with {
             SpacingAbove = definition.SpacingAbove.IfNone(ds.SpacingAbove),
-            SpacingBelow = definition.SpacingBelow.IfNone(ds.SpacingBelow),
+            SpacingBelow = definition.SpacingBelowStyle.Spacing.IfNone(ds.SpacingBelow),
         };
 }

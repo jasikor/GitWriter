@@ -1,4 +1,6 @@
-﻿namespace BookModel.TextDocument;
+﻿using BookModel.TextDocument.Styles;
+
+namespace BookModel.TextDocument;
 
 public class ListSection : DocumentSection
 {

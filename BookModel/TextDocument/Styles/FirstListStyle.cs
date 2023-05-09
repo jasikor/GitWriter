@@ -7,8 +7,8 @@ public record FirstListStyle
 
 public static class FirstListStyleExt
 {
-    public static FirstListStyle ApplyStyleDefinition(this FirstListStyle fs, FirstListStyleDefinition definition) =>
+    public static FirstListStyle ApplyStyleDefinition(this FirstListStyle fs, SpacingBelowStyleDefinition styleDefinition) =>
         fs with {
-            SpacingBelow = definition.SpacingBelow.IfNone(fs.SpacingBelow),
+            SpacingBelow = styleDefinition.Spacing.IfNone(fs.SpacingBelow),
         };
 }

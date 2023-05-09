@@ -5,8 +5,8 @@ namespace BookModel.TextDocument;
 
 public abstract class DocumentSection
 {
-    public DocumentSectionStyleDefinition Style { get; set; } = new DocumentSectionStyleDefinition() {
+    public VerticalSpacingStyleDefinition Style { get; set; } = new VerticalSpacingStyleDefinition() {
         SpacingAbove = 50,
-        SpacingBelow = 15
+        SpacingBelowStyle = new SpacingBelowStyleDefinition() {Spacing = 15}
     };
 }

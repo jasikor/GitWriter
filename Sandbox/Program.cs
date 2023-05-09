@@ -14,7 +14,7 @@ public static class Program
         var doc = CreateDocument();
 
         var res = new StringBuilder();
-        res.Append("<!DOCTYPE html><html> <head><title>Page Title</title></head><body>\n");
+        res.Append($"<!DOCTYPE html><html> <head><title>Page Title {DateTime.Now}</title></head><body>\n");
         res.Append(Render(doc));
         res.Append("</body></html>");
         Console.WriteLine(res);
@@ -74,7 +74,7 @@ public static class Program
         res.Append(RenderFirstList(list.FirstParagraph));
 
         if (list.Sections.Any()) {
-            FirstListStyle style = new FirstListStyle().ApplyStyleDefinition(list.FirstParagraph.Style);
+            FirstListStyle style = new FirstListStyle().ApplyStyleDefinition(list.Style.SpacingBelowStyle);
             res.Append($"<span>extra space {style.SpacingBelow}</span>");
         }
         foreach (var section in list.Sections) {
