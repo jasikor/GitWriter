@@ -152,7 +152,8 @@ public static class Program
     private static ListSection CreateListSection()
     {
         var res = new ListSection();
-        res.FirstParagraph.Spans.Add(CreateCharacterSpan("pierwszy paragraf listy"));
+        res.FirstParagraph.Spans.Add(CreateCharacterSpan("pierwszy paragraf listy "));
+        res.FirstParagraph.Spans.Add(CreateCharacterSpan("drugi span pierwszego paragrafu listy"));
         res.FirstParagraph.LineSpacing = new() {Spacing = random.NextSingle() * 15f + 100f};
         res.ListStyle = random.NextSingle() < 0.5
             ? new() {Indentation = random.NextSingle() * 30f}
