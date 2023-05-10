@@ -16,7 +16,7 @@ public static class Program
         var defaultStyle = defaultStyleBuilder
             .VerticalSpacing(new VerticalSpacingStyle() {Above = 2, Below = 11})
             .LineSpacing(new LineSpacingStyle() {Spacing = 15f})
-            .Font(new FontStyle(){Family = "Arial", Size = 12})
+            .Font(new FontStyle() {Family = "Arial", Size = 12})
             .Build();
         ;
 
@@ -47,7 +47,7 @@ public static class Program
     }
 
     private static string Inspect(string s) =>
-        $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; background-color: #eeeeee; margin: 1px\">{s}</p>";
+        $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; background-color: #f8f8f8; margin: 1px\">{s}</p>";
 
     private static StringBuilder RenderDocSection(DocumentSection documentSection, DocumentStyle style)
     {
@@ -152,7 +152,9 @@ public static class Program
         res.FirstParagraph.LineSpacing = new() {Spacing = random.NextSingle() * 15f + 100f};
 
         for (int i = random.Next(0, 9); i > 0; i--)
-            res.Sections.Add(CreateParagraphSection());
+            res.Sections.Add(random.NextSingle() < 0.8
+                ? CreateParagraphSection()
+                : CreateListSection());
         return res;
     }
 
@@ -161,9 +163,12 @@ public static class Program
         var res = new ParagraphSection();
         res.Spans.Add(CreateCharacterSpan("Span pierwszy"));
         res.Spans.Add(CreateCharacterSpan(" i tu drugi"));
-        res.LineSpacing = new() {
-            Spacing = random.NextSingle() * 15f,
-        };
+        res.LineSpacing =
+            random.NextSingle() < 0.5
+                ? new() {
+                    Spacing = random.NextSingle() * 15f,
+                }
+                : new();
         return res;
     }
 
@@ -171,10 +176,13 @@ public static class Program
     {
         var res = new CharacterSpan();
         res.Characters = s;
-        res.Style = new() {
-            Size = random.NextSingle() * 15 + 50,
-            Family = random.NextSingle() <0.5f ? "Times New Roman" : "Courier New",
-        };
+        res.Style =
+            random.NextSingle() < 0.5
+                ? new() {
+                    Size = random.NextSingle() * 15 + 50,
+                    Family = random.NextSingle() < 0.5f ? "Times New Roman" : "Courier New",
+                }
+                : new();
         return res;
     }
 }
