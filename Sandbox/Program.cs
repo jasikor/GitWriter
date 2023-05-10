@@ -15,6 +15,7 @@ public static class Program
         var defaultStyleBuilder = new StyleBuilder();
         var defaultStyle = defaultStyleBuilder
             .VerticalSpacing(new VerticalSpacingStyle() {Above = 2, Below = 11})
+            .LineSpacing(new LineSpacingStyle(){Spacing = 15f})
             .Build();
         ;
 
@@ -104,13 +105,15 @@ public static class Program
 
     private static StringBuilder RenderParagraph(ParagraphSection par, DocumentStyle style)
     {
+        var st = style.ApplyStyleDefinition(par.LineSpacing);
         var res = new StringBuilder();
-        res.Append("<p style=\"margin: 0px\"> Paragraf: ");
+        res.Append("<p style=\"margin: 0px\">");
+        res.Append(Inspect($"LineSpacing: {st.LineSpacing.Spacing}"));
         foreach (var s in par.Spans)
             res.Append(RenderSpan(s));
 
         res.Append("</p>");
-        res.Append(Inspect($"Below: {style.VerticalSpacing.Below}"));
+        res.Append(Inspect($"Below: {st.VerticalSpacing.Below}"));
 
         return res;
     }
@@ -154,6 +157,9 @@ public static class Program
         var res = new ParagraphSection();
         res.Spans.Add(CreateCharacterSpan("Span pierwszy"));
         res.Spans.Add(CreateCharacterSpan(" i tu drugi"));
+        res.LineSpacing = new() {
+            Spacing = random.NextSingle() * 15f,
+        };
         return res;
     }
 

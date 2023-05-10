@@ -8,4 +8,3 @@ public class VerticalSpacingStyleDefinition : StyleDefinition
     public Option<float> Below;
     
 }
-
