@@ -4,6 +4,6 @@ namespace BookModel.TextDocument;
 
 public class ListSection : DocumentSection
 {
-    public FirstListElement FirstParagraph = new FirstListElement();
+    public ParagraphSection FirstParagraph = new();
     public IList<DocumentSection> Sections = new List<DocumentSection>();
 }

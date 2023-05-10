@@ -4,7 +4,7 @@ namespace BookModel.TextDocument.Styles;
 
 public abstract class StyleDefinition
 {
-    public StyleId Id;
+    public StyleDefinitionId Id;
     public string Name { get; set; }
-    public Option<StyleId> InheritedFrom;
+    public Option<StyleDefinitionId> InheritedFrom;
 }

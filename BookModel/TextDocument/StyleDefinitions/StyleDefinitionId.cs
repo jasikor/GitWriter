@@ -1,6 +1,6 @@
 ﻿namespace BookModel.TextDocument.Styles;
 
-public class StyleId
+public class StyleDefinitionId
 {
     public string Id;
 }
