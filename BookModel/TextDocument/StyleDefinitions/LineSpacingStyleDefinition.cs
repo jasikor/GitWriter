@@ -1,6 +1,7 @@
-﻿using LanguageExt;
+﻿using BookModel.TextDocument.Styles;
+using LanguageExt;
 
-namespace BookModel.TextDocument.Styles;
+namespace BookModel.TextDocument.StyleDefinitions;
 
 public class LineSpacingStyleDefinition : StyleDefinition
 {

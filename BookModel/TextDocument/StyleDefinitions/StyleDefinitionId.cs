@@ -1,4 +1,4 @@
-﻿namespace BookModel.TextDocument.Styles;
+﻿namespace BookModel.TextDocument.StyleDefinitions;
 
 public class StyleDefinitionId
 {

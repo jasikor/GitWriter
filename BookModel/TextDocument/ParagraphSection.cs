@@ -1,4 +1,5 @@
-﻿using BookModel.TextDocument.Styles;
+﻿using BookModel.TextDocument.StyleDefinitions;
+using BookModel.TextDocument.Styles;
 
 namespace BookModel.TextDocument;
 

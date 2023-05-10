@@ -1,6 +1,6 @@
 ﻿using LanguageExt;
 
-namespace BookModel.TextDocument.Styles;
+namespace BookModel.TextDocument.StyleDefinitions;
 
 public enum ListType
 {
