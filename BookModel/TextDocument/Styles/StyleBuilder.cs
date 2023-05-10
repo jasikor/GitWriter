@@ -5,6 +5,7 @@ public class StyleBuilder
     private VerticalSpacingStyle _verticalSpacing;
     private LineSpacingStyle _lineSpacing;
     private FontStyle _font;
+    private ListStyle _listStyle;
 
 
     public DocumentStyle Build()
@@ -13,6 +14,7 @@ public class StyleBuilder
             VerticalSpacing = _verticalSpacing,
             LineSpacing = _lineSpacing,
             Font = _font,
+            ListStyle = _listStyle,
         };
     }
 
@@ -29,6 +31,12 @@ public class StyleBuilder
     public StyleBuilder Font(FontStyle s)
     {
         _font = s;
+        return this;
+    }
+    
+    public StyleBuilder ListStyle(ListStyle s)
+    {
+        _listStyle = s;
         return this;
     }
 }

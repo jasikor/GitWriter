@@ -2,14 +2,7 @@
 
 namespace BookModel.TextDocument.StyleDefinitions;
 
-public enum ListType
+public class ListStyleDefinition : StyleDefinition
 {
-    Numbered,
-    Bulleted
-}
-
-public abstract class ListStyleDefinition : StyleDefinition
-{
-    public ListType Type;
     public Option<float> Indentation;
 }

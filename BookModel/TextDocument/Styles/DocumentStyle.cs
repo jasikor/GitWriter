@@ -9,6 +9,7 @@ public record DocumentStyle
     public VerticalSpacingStyle VerticalSpacing;
     public LineSpacingStyle LineSpacing;
     public FontStyle Font;
+    public ListStyle ListStyle;
 }
 
 public static class DocumentStyleExt
@@ -27,12 +28,20 @@ public static class DocumentStyleExt
             }
         };
 
-    public static DocumentStyle ApplyFontDefinition(this DocumentStyle ds,
+    public static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
         FontStyleDefinition definition) =>
         ds with {
             Font = ds.Font with {
                 Family = definition.Family.IfNone(ds.Font.Family),
                 Size = definition.Size.IfNone(ds.Font.Size),
+            }
+        };
+    
+    public static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
+        ListStyleDefinition definition) =>
+        ds with {
+            ListStyle = ds.ListStyle with {
+                Indentation= definition.Indentation.IfNone(ds.ListStyle.Indentation),
             }
         };
 

@@ -17,6 +17,7 @@ public static class Program
             .VerticalSpacing(new VerticalSpacingStyle() {Above = 2, Below = 11})
             .LineSpacing(new LineSpacingStyle() {Spacing = 15f})
             .Font(new FontStyle() {Family = "Arial", Size = 12})
+            .ListStyle(new ListStyle() {Indentation = 20f})
             .Build();
         ;
 
@@ -51,7 +52,7 @@ public static class Program
 
     private static StringBuilder RenderDocSection(DocumentSection documentSection, DocumentStyle style)
     {
-        var s = style.ApplyStyleDefinition(documentSection.Style);
+        var s = style.ApplyStyleDefinition(documentSection.VerticalSpacing);
         var res = new StringBuilder();
         res.Append(Inspect($"Above: {s.VerticalSpacing.Above}"));
 
@@ -69,11 +70,14 @@ public static class Program
 
     private static StringBuilder RenderList(ListSection list, DocumentStyle style)
     {
-        var s = style.ApplyStyleDefinition(list.Style);
+        var s = style
+            .ApplyStyleDefinition(list.ListStyle)
+            .ApplyStyleDefinition(list.VerticalSpacing);
 
         var res = new StringBuilder();
         res.Append("<div style=\"overflow:auto;\">");
 
+        res.Append(Inspect($"{s.ListStyle}"));
         res.Append("<div style=\"float: left; width: 5%;\">");
         res.Append(RenderBullet());
         res.Append("</div>");
@@ -121,7 +125,7 @@ public static class Program
 
     private static StringBuilder RenderSpan(CharacterSpan characterSpan, DocumentStyle style)
     {
-        var s = style.ApplyFontDefinition(characterSpan.Style);
+        var s = style.ApplyStyleDefinition(characterSpan.Style);
         var res = new StringBuilder();
         res.Append(Inspect($"Font:{s.Font}"));
         res.Append($"<span style=\"font-family:{s.Font.Family}\">{characterSpan.Characters}</span>");
@@ -143,14 +147,16 @@ public static class Program
         return res;
     }
 
-    private static Random random = new Random();
+    private static readonly Random random = new Random();
 
     private static ListSection CreateListSection()
     {
         var res = new ListSection();
         res.FirstParagraph.Spans.Add(CreateCharacterSpan("pierwszy paragraf listy"));
         res.FirstParagraph.LineSpacing = new() {Spacing = random.NextSingle() * 15f + 100f};
-
+        res.ListStyle = random.NextSingle() < 0.5
+            ? new() {Indentation = random.NextSingle() * 30f}
+            : new();
         for (int i = random.Next(0, 9); i > 0; i--)
             res.Sections.Add(random.NextSingle() < 0.8
                 ? CreateParagraphSection()

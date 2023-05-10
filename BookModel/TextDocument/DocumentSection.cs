@@ -6,5 +6,5 @@ namespace BookModel.TextDocument;
 
 public abstract class DocumentSection
 {
-    public VerticalSpacingStyleDefinition Style { get; set; } = new();
+    public VerticalSpacingStyleDefinition VerticalSpacing { get; set; } = new();
 }
