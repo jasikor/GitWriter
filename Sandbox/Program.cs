@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using BookModel.TextDocument;
 using BookModel.TextDocument.Styles;
+using LanguageExt;
 
 namespace Sandbox;
 
@@ -14,8 +15,9 @@ public static class Program
         var doc = CreateDocument();
         var defaultStyleBuilder = new StyleBuilder();
         var defaultStyle = defaultStyleBuilder
-            .VerticalSpacing(new VerticalSpacingStyle() {Above = 2, Below = 11})
-            .LineSpacing(new LineSpacingStyle() {Spacing = 15f})
+            .AboveSpacing(2)
+            .BelowSpacing(13)
+            .ParagraphStyle(new ParagraphStyle() {LineSpacing = 15f})
             .Font(new FontStyle() {Family = "Arial", Size = 12})
             .ListStyle(new ListStyle() {Indentation = 20f})
             .Build();
@@ -54,9 +56,9 @@ public static class Program
     {
         var s = style.ApplyStyleDefinition(documentSection.VerticalSpacing);
         var res = new StringBuilder();
-        res.Append(Inspect($"Above: {s.VerticalSpacing.Above}"));
+        res.Append(Inspect($"Above: {s.AboveSpacing}"));
 
-        res.Append($"<div style=\"margin: {style.VerticalSpacing.Above}px 0px {style.VerticalSpacing.Below}px \">");
+        res.Append($"<div style=\"margin: {style.AboveSpacing}px 0px {style.Paragraph.LineSpacing}px \">");
         res.Append(documentSection switch {
             ParagraphSection par => RenderParagraph(par, s),
             ListSection list => RenderList(list, s),
@@ -71,13 +73,12 @@ public static class Program
     private static StringBuilder RenderList(ListSection list, DocumentStyle style)
     {
         var s = style
-            .ApplyStyleDefinition(list.ListStyle)
-            .ApplyStyleDefinition(list.VerticalSpacing);
+            .ApplyStyleDefinition(list.ListStyle);
 
         var res = new StringBuilder();
         res.Append("<div style=\"overflow:auto;\">");
 
-        res.Append(Inspect($"{s.ListStyle}"));
+        res.Append(Inspect($"{s.ListStyle}, Below:{s.BelowSpacing}"));
         res.Append("<div style=\"float: left; width: 5%;\">");
         res.Append(RenderBullet());
         res.Append("</div>");
@@ -92,12 +93,15 @@ public static class Program
 
     private static StringBuilder RenderIntendedContent(ListSection list, DocumentStyle style)
     {
+        
+        // TODO: nie wiadomo, jak ustalać style dla poniższego contentu. Czy Below powinno być dziedziczone z listy, czy z Paragrafu?
+        var s = style.ApplyStyleDefinition(list.ListStyle);
         var res = new StringBuilder();
-        res.Append(RenderParagraph(list.FirstParagraph, style));
+        res.Append(RenderParagraph(list.FirstParagraph, s));
 
 
         foreach (var section in list.Sections) {
-            res.Append(RenderDocSection(section, style));
+            res.Append(RenderDocSection(section, s));
         }
 
         return res;
@@ -110,15 +114,15 @@ public static class Program
 
     private static StringBuilder RenderParagraph(ParagraphSection par, DocumentStyle style)
     {
-        var st = style.ApplyStyleDefinition(par.LineSpacing);
+        var st = style.ApplyStyleDefinition(par.ParagraphStyle);
         var res = new StringBuilder();
         res.Append("<p style=\"margin: 0px\">");
-        res.Append(Inspect($"LineSpacing: {st.LineSpacing.Spacing}"));
+        res.Append(Inspect($"LineSpacing: {st.Paragraph.LineSpacing}"));
         foreach (var s in par.Spans)
             res.Append(RenderSpan(s, st));
 
         res.Append("</p>");
-        res.Append(Inspect($"Below: {st.VerticalSpacing.Below}"));
+        res.Append(Inspect($"Below: {st.BelowSpacing}"));
 
         return res;
     }
@@ -154,10 +158,10 @@ public static class Program
         var res = new ListSection();
         res.FirstParagraph.Spans.Add(CreateCharacterSpan("pierwszy paragraf listy "));
         res.FirstParagraph.Spans.Add(CreateCharacterSpan("drugi span pierwszego paragrafu listy"));
-        res.FirstParagraph.LineSpacing = new() {Spacing = random.NextSingle() * 15f + 100f};
+        res.FirstParagraph.ParagraphStyle = new() {LineSpacing = random.NextSingle() * 15f + 100f};
         res.ListStyle = random.NextSingle() < 0.5
-            ? new() {Indentation = random.NextSingle() * 30f}
-            : new();
+            ? new() {Indentation = random.NextSingle() * 30f, Below = 19}
+            : new(){Below = 33};
         for (int i = random.Next(0, 9); i > 0; i--)
             res.Sections.Add(random.NextSingle() < 0.8
                 ? CreateParagraphSection()
@@ -170,10 +174,11 @@ public static class Program
         var res = new ParagraphSection();
         res.Spans.Add(CreateCharacterSpan("Span pierwszy"));
         res.Spans.Add(CreateCharacterSpan(" i tu drugi"));
-        res.LineSpacing =
+        res.ParagraphStyle =
             random.NextSingle() < 0.5
                 ? new() {
-                    Spacing = random.NextSingle() * 15f,
+                    LineSpacing = random.NextSingle() * 15f,
+                    Below = Option<float>.None //random.NextSingle() * 10f,
                 }
                 : new();
         return res;

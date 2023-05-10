@@ -1,8 +1,10 @@
 ﻿using LanguageExt;
 
-namespace BookModel.TextDocument.StyleDefinitions;
+namespace BookModel.TextDocument.Styles;
 
 public class ParagraphStyleDefinition
 {
     public Option<float> LineSpacing;
+    public Option<float> Below;
+
 }

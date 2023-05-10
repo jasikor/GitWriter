@@ -6,6 +6,5 @@ namespace BookModel.TextDocument.StyleDefinitions;
 public class VerticalSpacingStyleDefinition : StyleDefinition
 {
     public Option<float> Above;
-    public Option<float> Below;
     
 }

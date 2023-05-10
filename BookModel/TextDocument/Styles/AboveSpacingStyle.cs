@@ -1,6 +1,6 @@
 ﻿namespace BookModel.TextDocument.Styles;
 
-public record LineSpacingStyle
+public record AboveSpacingStyle
 {
     public float Spacing;
 }

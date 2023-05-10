@@ -2,30 +2,36 @@
 
 public class StyleBuilder 
 {
-    private VerticalSpacingStyle _verticalSpacing;
-    private LineSpacingStyle _lineSpacing;
+    private float _aboveSpacing;
+    private ParagraphStyle _paragraph;
     private FontStyle _font;
     private ListStyle _listStyle;
+    private float _belowSpacing;
 
 
     public DocumentStyle Build()
     {
         return new DocumentStyle() {
-            VerticalSpacing = _verticalSpacing,
-            LineSpacing = _lineSpacing,
+            AboveSpacing = _aboveSpacing,
+            BelowSpacing = _belowSpacing,
+            Paragraph = _paragraph,
             Font = _font,
             ListStyle = _listStyle,
         };
     }
 
-    public StyleBuilder VerticalSpacing(VerticalSpacingStyle s)
+    public StyleBuilder AboveSpacing(float s)
     {
-        _verticalSpacing = s;
+        _aboveSpacing = s;
+        return this;
+    } public StyleBuilder BelowSpacing(float s)
+    {
+        _belowSpacing = s;
         return this;
     }
-    public StyleBuilder LineSpacing(LineSpacingStyle s)
+    public StyleBuilder ParagraphStyle(ParagraphStyle s)
     {
-        _lineSpacing = s;
+        _paragraph = s;
         return this;
     }
     public StyleBuilder Font(FontStyle s)

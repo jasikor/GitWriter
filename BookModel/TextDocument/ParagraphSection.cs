@@ -5,6 +5,6 @@ namespace BookModel.TextDocument;
 
 public class ParagraphSection : DocumentSection
 {
-    public LineSpacingStyleDefinition LineSpacing = new();
+    public ParagraphStyleDefinition ParagraphStyle = new();
     public IList<CharacterSpan> Spans { get; init; } = new List<CharacterSpan>();
 }
