@@ -46,7 +46,7 @@ public static class DocumentStyleExt
             ListStyle = ds.ListStyle with {
                 Indentation= definition.Indentation.IfNone(ds.ListStyle.Indentation),
             },
-            BelowSpacing =  definition.Below.IfNone(ds.BelowSpacing)
+            BelowSpacing =  definition.SpacingBelowFirstElement.IfNone(ds.BelowSpacing)
         };
 
 }

@@ -72,19 +72,15 @@ public static class Program
 
     private static StringBuilder RenderList(ListSection list, DocumentStyle style)
     {
-        var s = style
-            .ApplyStyleDefinition(list.ListStyle);
-
         var res = new StringBuilder();
         res.Append("<div style=\"overflow:auto;\">");
 
-        res.Append(Inspect($"{s.ListStyle}, Below:{s.BelowSpacing}"));
         res.Append("<div style=\"float: left; width: 5%;\">");
         res.Append(RenderBullet());
         res.Append("</div>");
 
         res.Append("<div style=\"float: right; width: 95%;\">");
-        res.Append(RenderIntendedContent(list, s));
+        res.Append(RenderIntendedContent(list, style));
         res.Append("</div>");
 
         res.Append("</div>");
@@ -93,24 +89,22 @@ public static class Program
 
     private static StringBuilder RenderIntendedContent(ListSection list, DocumentStyle style)
     {
-        
-        // TODO: nie wiadomo, jak ustalać style dla poniższego contentu. Czy Below powinno być dziedziczone z listy, czy z Paragrafu?
         var s = style.ApplyStyleDefinition(list.ListStyle);
+
         var res = new StringBuilder();
+        res.Append(Inspect($"{s.ListStyle}, Below:{s.BelowSpacing}"));
+
         res.Append(RenderParagraph(list.FirstParagraph, s));
 
 
         foreach (var section in list.Sections) {
-            res.Append(RenderDocSection(section, s));
+            res.Append(RenderDocSection(section, style));
         }
 
         return res;
     }
 
-    private static string RenderBullet()
-    {
-        return "*";
-    }
+    private static string RenderBullet() => "\x2022";
 
     private static StringBuilder RenderParagraph(ParagraphSection par, DocumentStyle style)
     {
@@ -160,8 +154,8 @@ public static class Program
         res.FirstParagraph.Spans.Add(CreateCharacterSpan("drugi span pierwszego paragrafu listy"));
         res.FirstParagraph.ParagraphStyle = new() {LineSpacing = random.NextSingle() * 15f + 100f};
         res.ListStyle = random.NextSingle() < 0.5
-            ? new() {Indentation = random.NextSingle() * 30f, Below = 19}
-            : new(){Below = 33};
+            ? new() {Indentation = random.NextSingle() * 30f, SpacingBelowFirstElement = 19}
+            : new() {SpacingBelowFirstElement = 33};
         for (int i = random.Next(0, 9); i > 0; i--)
             res.Sections.Add(random.NextSingle() < 0.8
                 ? CreateParagraphSection()

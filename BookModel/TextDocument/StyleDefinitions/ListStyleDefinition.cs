@@ -5,6 +5,6 @@ namespace BookModel.TextDocument.StyleDefinitions;
 public class ListStyleDefinition : StyleDefinition
 {
     public Option<float> Indentation;
-    public Option<float> Below;
+    public Option<float> SpacingBelowFirstElement;
 
 }
