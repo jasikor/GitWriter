@@ -28,7 +28,7 @@ public class StylesManager
             return _paragraphs[id];
         }
         catch (KeyNotFoundException) {
-            return _paragraphs[ParagraphStyleDefinitionID.Default];
+            return ParagraphStyleDefinition.Empty;
         }
     }
 
