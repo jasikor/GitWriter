@@ -18,7 +18,7 @@ public static class Program
             .AboveSpacing(2)
             .BelowSpacing(13)
             .LineSpacing(15f)
-            .Character(new CharacterStyle() {FontFamily = "Arial", FontSize = 12})
+            .CharacterStyle(new CharacterStyle() {FontFamily = "Arial", FontSize = 12})
             .ListStyle(new ListStyle() {Indentation = 20f})
             .Build();
         ;
@@ -131,8 +131,8 @@ public static class Program
     {
         var s = style.Apply(characterSpan.Style);
         var res = new StringBuilder();
-        res.Append(Inspect($"Character:{s.Character}"));
-        res.Append($"<span style=\"font-family:{s.Character.FontFamily}\">{characterSpan.Characters}</span>");
+        res.Append(Inspect($"Character:{s.CharacterStyle}"));
+        res.Append($"<span style=\"font-family:{s.CharacterStyle.FontFamily}\">{characterSpan.Characters}</span>");
         return res;
     }
 

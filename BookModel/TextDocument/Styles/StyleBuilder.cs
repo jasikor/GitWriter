@@ -4,7 +4,7 @@ public class StyleBuilder
 {
     private float _aboveSpacing;
     private float _lineSpacing;
-    private CharacterStyle _character;
+    private CharacterStyle _characterStyle;
     private ListStyle _listStyle;
     private float _belowSpacing;
 
@@ -15,7 +15,7 @@ public class StyleBuilder
             SpacingAbove = _aboveSpacing,
             SpacingBelow = _belowSpacing,
             LineSpacing = _lineSpacing,
-            Character = _character,
+            CharacterStyle = _characterStyle,
             ListStyle = _listStyle,
         };
     }
@@ -34,9 +34,9 @@ public class StyleBuilder
         _lineSpacing = s;
         return this;
     }
-    public StyleBuilder Character(CharacterStyle s)
+    public StyleBuilder CharacterStyle(CharacterStyle s)
     {
-        _character = s;
+        _characterStyle = s;
         return this;
     }
     

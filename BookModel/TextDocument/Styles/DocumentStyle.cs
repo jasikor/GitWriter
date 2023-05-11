@@ -8,7 +8,7 @@ public record DocumentStyle
     public float SpacingAbove;
     public float SpacingBelow;
     public float LineSpacing;
-    public CharacterStyle Character;
+    public CharacterStyle CharacterStyle;
     public ListStyle ListStyle;
 }
 
@@ -35,20 +35,20 @@ public static class DocumentStyleExt
             LineSpacing = definition.LineSpacing.IfNone(ds.LineSpacing),
             SpacingBelow = definition.SpacingBelow.IfNone(ds.SpacingBelow),
             SpacingAbove = definition.SpacingAbove.IfNone(ds.SpacingAbove),
-            Character = ApplyCharacterStyleDefinition(ds, definition.Character),
+            CharacterStyle = ApplyCharacterStyleDefinition(ds, definition.Character),
         };
 
     private static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
         CharacterStyleDefinition definition) =>
         ds with {
-            Character = ApplyCharacterStyleDefinition(ds, definition)
+            CharacterStyle = ApplyCharacterStyleDefinition(ds, definition)
         };
 
     private static CharacterStyle ApplyCharacterStyleDefinition(DocumentStyle ds, CharacterStyleDefinition definition)
     {
-        return ds.Character with {
-            FontFamily = definition.FontFamily.IfNone(ds.Character.FontFamily),
-            FontSize = definition.FontSize.IfNone(ds.Character.FontSize),
+        return ds.CharacterStyle with {
+            FontFamily = definition.FontFamily.IfNone(ds.CharacterStyle.FontFamily),
+            FontSize = definition.FontSize.IfNone(ds.CharacterStyle.FontSize),
         };
     }
 
