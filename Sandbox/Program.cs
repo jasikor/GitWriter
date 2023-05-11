@@ -22,12 +22,13 @@ public static class Program
             .ListStyle(new ListStyle() {Indentation = 20f})
             .Build();
         ;
+        var styleManager = new StylesManager();
 
         var res = new StringBuilder();
         res.Append(
             $"<!DOCTYPE html><html> <head><title>Page Title {DateTime.Now}</title></head><body  style=\"font-family:iA Writer Quattro V Regular, Courier New\">\n");
 
-        res.Append(Render(doc, defaultStyle));
+        res.Append(Render(doc, defaultStyle, styleManager));
 
 
         res.Append("</body></html>");
@@ -37,12 +38,12 @@ public static class Program
         return 0;
     }
 
-    private static StringBuilder Render(Document doc, DocumentStyle defaultStyle)
+    private static StringBuilder Render(Document doc, DocumentStyle defaultStyle, StylesManager stylesManager)
     {
         StringBuilder res = new StringBuilder();
         res.Append(Inspect(defaultStyle.ToString()));
         foreach (var d in doc.Items) {
-            res.Append(RenderDocSection(d, defaultStyle));
+            res.Append(RenderDocSection(d, defaultStyle, stylesManager));
             res.Append("\n");
         }
 
@@ -52,16 +53,19 @@ public static class Program
     private static string Inspect(string s) =>
         $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; background-color: #f8f8f8; margin: 1px\">{s}</p>";
 
-    private static StringBuilder RenderDocSection(DocumentSection documentSection, DocumentStyle style)
+    private static StringBuilder RenderDocSection(DocumentSection documentSection, DocumentStyle style,
+        StylesManager stylesManager)
     {
-        var s = style.Apply(documentSection.VerticalSpacing);
+        var s = stylesManager
+            .Apply(style, documentSection.ParagraphStyleId)
+            .Apply(documentSection.VerticalSpacing);
         var res = new StringBuilder();
         res.Append(Inspect($"Above: {s.SpacingAbove}"));
 
         res.Append($"<div style=\"margin: {style.SpacingAbove}px 0px {style.LineSpacing}px \">");
         res.Append(documentSection switch {
             ParagraphSection par => RenderParagraph(par, s),
-            ListSection list => RenderList(list, s),
+            ListSection list => RenderList(list, s, stylesManager),
             _ => new UnreachableException()
         });
 
@@ -70,24 +74,26 @@ public static class Program
         return res;
     }
 
-    private static StringBuilder RenderList(ListSection list, DocumentStyle style)
+    private static StringBuilder RenderList(ListSection list, DocumentStyle style, StylesManager stylesManager)
     {
         var res = new StringBuilder();
         res.Append("<div style=\"overflow:auto;\">");
 
-        res.Append("<div style=\"float: left; width: 5%;\">");
+        var s = stylesManager.Apply(style,list.ListStyleId);
+        res.Append("<div style=\"float: left; width: 10%;\">");
+        res.Append(Inspect($"Indentation: {s.ListStyle.Indentation}"));
         res.Append(RenderBullet());
         res.Append("</div>");
 
-        res.Append("<div style=\"float: right; width: 95%;\">");
-        res.Append(RenderIntendedContent(list, style));
+        res.Append("<div style=\"float: right; width: 90%;\">");
+        res.Append(RenderIntendedContent(list, style, stylesManager));
         res.Append("</div>");
 
         res.Append("</div>");
         return res;
     }
 
-    private static StringBuilder RenderIntendedContent(ListSection list, DocumentStyle style)
+    private static StringBuilder RenderIntendedContent(ListSection list, DocumentStyle style, StylesManager stylesManager)
     {
         var s = style.Apply(list.ListStyle);
 
@@ -98,7 +104,7 @@ public static class Program
 
 
         foreach (var section in list.Sections) {
-            res.Append(RenderDocSection(section, style));
+            res.Append(RenderDocSection(section, style, stylesManager));
         }
 
         return res;

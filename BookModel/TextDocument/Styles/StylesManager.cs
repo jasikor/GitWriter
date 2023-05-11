@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using BookModel.TextDocument.StyleDefinitions;
+using LanguageExt;
 
 namespace BookModel.TextDocument.Styles;
 
@@ -13,6 +15,11 @@ public class StylesManager
             {ParagraphStyleDefinitionID.Heading3, new() {Font = new() {Size = 10}}},
             {ParagraphStyleDefinitionID.Title, new() {Font = new() {Size = 20}}},
         };
+
+    public DocumentStyle Apply(DocumentStyle ds, Option<ParagraphStyleDefinitionID> definitionId) =>
+        definitionId.Match(di => ds.Apply(FindParagraphStyleDefinition(di)), ds);
+ public DocumentStyle Apply(DocumentStyle ds, Option<ListStyleDefinitionID> definitionId) =>
+        definitionId.Match(di => ds.Apply(FindListStyleDefinition(di)), ds);
 
     public DocumentStyle Apply(DocumentStyle ds, StyleDefinitionId definitionId) =>
         definitionId switch {
