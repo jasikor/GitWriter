@@ -1,7 +1,5 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using BookModel.TextDocument.StyleDefinitions;
-using LanguageExt.Pretty;
 
 namespace BookModel.TextDocument.Styles;
 
