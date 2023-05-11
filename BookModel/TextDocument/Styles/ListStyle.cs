@@ -3,5 +3,4 @@
 public record ListStyle
 {
     public float Indentation;
-    
 }

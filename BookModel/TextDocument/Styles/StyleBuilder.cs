@@ -3,7 +3,7 @@
 public class StyleBuilder 
 {
     private float _aboveSpacing;
-    private ParagraphStyle _paragraph;
+    private float _lineSpacing;
     private FontStyle _font;
     private ListStyle _listStyle;
     private float _belowSpacing;
@@ -12,9 +12,9 @@ public class StyleBuilder
     public DocumentStyle Build()
     {
         return new DocumentStyle() {
-            AboveSpacing = _aboveSpacing,
-            BelowSpacing = _belowSpacing,
-            Paragraph = _paragraph,
+            SpacingAbove = _aboveSpacing,
+            SpacingBelow = _belowSpacing,
+            LineSpacing = _lineSpacing,
             Font = _font,
             ListStyle = _listStyle,
         };
@@ -29,9 +29,9 @@ public class StyleBuilder
         _belowSpacing = s;
         return this;
     }
-    public StyleBuilder ParagraphStyle(ParagraphStyle s)
+    public StyleBuilder LineSpacing(float s)
     {
-        _paragraph = s;
+        _lineSpacing = s;
         return this;
     }
     public StyleBuilder Font(FontStyle s)

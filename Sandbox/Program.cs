@@ -17,7 +17,7 @@ public static class Program
         var defaultStyle = defaultStyleBuilder
             .AboveSpacing(2)
             .BelowSpacing(13)
-            .ParagraphStyle(new ParagraphStyle() {LineSpacing = 15f})
+            .LineSpacing(15f)
             .Font(new FontStyle() {Family = "Arial", Size = 12})
             .ListStyle(new ListStyle() {Indentation = 20f})
             .Build();
@@ -54,11 +54,11 @@ public static class Program
 
     private static StringBuilder RenderDocSection(DocumentSection documentSection, DocumentStyle style)
     {
-        var s = style.ApplyStyleDefinition(documentSection.VerticalSpacing);
+        var s = style.Apply(documentSection.VerticalSpacing);
         var res = new StringBuilder();
-        res.Append(Inspect($"Above: {s.AboveSpacing}"));
+        res.Append(Inspect($"Above: {s.SpacingAbove}"));
 
-        res.Append($"<div style=\"margin: {style.AboveSpacing}px 0px {style.Paragraph.LineSpacing}px \">");
+        res.Append($"<div style=\"margin: {style.SpacingAbove}px 0px {style.LineSpacing}px \">");
         res.Append(documentSection switch {
             ParagraphSection par => RenderParagraph(par, s),
             ListSection list => RenderList(list, s),
@@ -89,10 +89,10 @@ public static class Program
 
     private static StringBuilder RenderIntendedContent(ListSection list, DocumentStyle style)
     {
-        var s = style.ApplyStyleDefinition(list.ListStyle);
+        var s = style.Apply(list.ListStyle);
 
         var res = new StringBuilder();
-        res.Append(Inspect($"{s.ListStyle}, Below:{s.BelowSpacing}"));
+        res.Append(Inspect($"{s.ListStyle}, Below:{s.SpacingBelow}"));
 
         res.Append(RenderParagraph(list.FirstParagraph, s));
 
@@ -108,28 +108,29 @@ public static class Program
 
     private static StringBuilder RenderParagraph(ParagraphSection par, DocumentStyle style)
     {
-        var st = style.ApplyStyleDefinition(par.ParagraphStyle);
+        var st = style.Apply(par.ParagraphStyle);
         var res = new StringBuilder();
         res.Append("<p style=\"margin: 0px\">");
-        res.Append(Inspect($"LineSpacing: {st.Paragraph.LineSpacing}"));
+        res.Append(Inspect($"LineSpacing: {st.LineSpacing}"));
         foreach (var s in par.Spans)
             res.Append(RenderSpan(s, st));
 
         res.Append("</p>");
-        res.Append(Inspect($"Below: {st.BelowSpacing}"));
+        res.Append(Inspect($"Below: {st.SpacingBelow}"));
 
         return res;
     }
 
     private static StringBuilder RenderSpan(CharacterSpan characterSpan, DocumentStyle style)
     {
-        var s = style.ApplyStyleDefinition(characterSpan.Style);
+        var s = style.Apply(characterSpan.Style);
         var res = new StringBuilder();
         res.Append(Inspect($"Font:{s.Font}"));
         res.Append($"<span style=\"font-family:{s.Font.Family}\">{characterSpan.Characters}</span>");
         return res;
     }
 
+/*******************************************************************************************/
     private static Document CreateDocument()
     {
         var res = new Document();
@@ -154,8 +155,8 @@ public static class Program
         res.FirstParagraph.Spans.Add(CreateCharacterSpan("drugi span pierwszego paragrafu listy"));
         res.FirstParagraph.ParagraphStyle = new() {LineSpacing = random.NextSingle() * 15f + 100f};
         res.ListStyle = random.NextSingle() < 0.5
-            ? new() {Indentation = random.NextSingle() * 30f, SpacingBelowFirstElement = 19}
-            : new() {SpacingBelowFirstElement = 33};
+            ? new() {Indentation = random.NextSingle() * 30f}
+            : new();
         for (int i = random.Next(0, 9); i > 0; i--)
             res.Sections.Add(random.NextSingle() < 0.8
                 ? CreateParagraphSection()
@@ -172,7 +173,7 @@ public static class Program
             random.NextSingle() < 0.5
                 ? new() {
                     LineSpacing = random.NextSingle() * 15f,
-                    Below = Option<float>.None //random.NextSingle() * 10f,
+                    SpacingBelow = Option<float>.None //random.NextSingle() * 10f,
                 }
                 : new();
         return res;

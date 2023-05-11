@@ -1,6 +1,12 @@
 ﻿namespace BookModel.TextDocument.StyleDefinitions;
 
-public class StyleDefinitionId
+public abstract class StyleDefinitionId
 {
     public string Id;
 }
+
+public class ParagraphStyleDefinitionID : StyleDefinitionId { }
+
+public class ListStyleDefinitionID : StyleDefinitionId { }
+
+public class CharacterStyleDefinitionID : StyleDefinition { }

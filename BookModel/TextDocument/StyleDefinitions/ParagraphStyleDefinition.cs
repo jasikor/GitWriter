@@ -1,10 +1,11 @@
 ﻿using LanguageExt;
 
-namespace BookModel.TextDocument.Styles;
+namespace BookModel.TextDocument.StyleDefinitions;
 
-public class ParagraphStyleDefinition
+public class ParagraphStyleDefinition  : StyleDefinition
 {
     public Option<float> LineSpacing;
-    public Option<float> Below;
-
+    public Option<float> SpacingBelow;
+    public Option<float> SpacingAbove;
+    public FontStyleDefinition Font = new ();
 }
