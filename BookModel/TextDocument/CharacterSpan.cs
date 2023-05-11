@@ -6,7 +6,7 @@ namespace BookModel.TextDocument;
 
 public class CharacterSpan
 {
-    public Option<FontStyleDefinitionID> CharacterStyleDefinitionId;
-    public FontStyleDefinition Style = new();
+    public Option<CharacterStyleDefinitionID> CharacterStyleDefinitionId;
+    public CharacterStyleDefinition Style = new();
     public string Characters;
 }

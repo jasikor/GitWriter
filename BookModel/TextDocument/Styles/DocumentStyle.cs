@@ -8,7 +8,7 @@ public record DocumentStyle
     public float SpacingAbove;
     public float SpacingBelow;
     public float LineSpacing;
-    public FontStyle Font;
+    public CharacterStyle Character;
     public ListStyle ListStyle;
 }
 
@@ -18,7 +18,7 @@ public static class DocumentStyleExt
         definition switch {
             VerticalSpacingStyleDefinition vsd => ds.ApplyStyleDefinition(vsd),
             ParagraphStyleDefinition psd => ds.ApplyStyleDefinition(psd),
-            FontStyleDefinition fsd => ds.ApplyStyleDefinition(fsd),
+            CharacterStyleDefinition csd => ds.ApplyStyleDefinition(csd),
             ListStyleDefinition lsd => ds.ApplyStyleDefinition(lsd),
             _ => throw new UnreachableException(),
         };
@@ -35,20 +35,20 @@ public static class DocumentStyleExt
             LineSpacing = definition.LineSpacing.IfNone(ds.LineSpacing),
             SpacingBelow = definition.SpacingBelow.IfNone(ds.SpacingBelow),
             SpacingAbove = definition.SpacingAbove.IfNone(ds.SpacingAbove),
-            Font = ApplyFontStyleDefinition(ds, definition.Font),
+            Character = ApplyCharacterStyleDefinition(ds, definition.Character),
         };
 
     private static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
-        FontStyleDefinition definition) =>
+        CharacterStyleDefinition definition) =>
         ds with {
-            Font = ApplyFontStyleDefinition(ds, definition)
+            Character = ApplyCharacterStyleDefinition(ds, definition)
         };
 
-    private static FontStyle ApplyFontStyleDefinition(DocumentStyle ds, FontStyleDefinition definition)
+    private static CharacterStyle ApplyCharacterStyleDefinition(DocumentStyle ds, CharacterStyleDefinition definition)
     {
-        return ds.Font with {
-            Family = definition.Family.IfNone(ds.Font.Family),
-            Size = definition.Size.IfNone(ds.Font.Size),
+        return ds.Character with {
+            FontFamily = definition.FontFamily.IfNone(ds.Character.FontFamily),
+            FontSize = definition.FontSize.IfNone(ds.Character.FontSize),
         };
     }
 

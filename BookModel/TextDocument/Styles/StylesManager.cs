@@ -10,10 +10,10 @@ public class StylesManager
     private Dictionary<ParagraphStyleDefinitionID, ParagraphStyleDefinition> _paragraphs =
         new() {
             {ParagraphStyleDefinitionID.Default, ParagraphStyleDefinition.Empty},
-            {ParagraphStyleDefinitionID.Heading1, new() {Font = new() {Size = 16}}},
-            {ParagraphStyleDefinitionID.Heading2, new() {Font = new() {Size = 14}}},
-            {ParagraphStyleDefinitionID.Heading3, new() {Font = new() {Size = 10}}},
-            {ParagraphStyleDefinitionID.Title, new() {Font = new() {Size = 20}}},
+            {ParagraphStyleDefinitionID.Heading1, new() {Character = new() {FontSize = 16}}},
+            {ParagraphStyleDefinitionID.Heading2, new() {Character = new() {FontSize = 14}}},
+            {ParagraphStyleDefinitionID.Heading3, new() {Character = new() {FontSize = 10}}},
+            {ParagraphStyleDefinitionID.Title, new() {Character = new() {FontSize = 20}}},
         };
 
     public DocumentStyle Apply(DocumentStyle ds, Option<ParagraphStyleDefinitionID> definitionId) =>
@@ -25,7 +25,7 @@ public class StylesManager
         definitionId switch {
             ParagraphStyleDefinitionID pd => ds.Apply(FindParagraphStyleDefinition(pd)),
             ListStyleDefinitionID ld => ds.Apply(FindListStyleDefinition(ld)),
-            FontStyleDefinitionID fd => ds.Apply(FindFontStyleDefinition(fd)),
+            CharacterStyleDefinitionID fd => ds.Apply(FindCharacterStyleDefinition(fd)),
             _ => throw new UnreachableException()
         };
 
@@ -42,6 +42,6 @@ public class StylesManager
     private ListStyleDefinition FindListStyleDefinition(ListStyleDefinitionID id)
         => ListStyleDefinition.Empty;
 
-    private FontStyleDefinition FindFontStyleDefinition(FontStyleDefinitionID id)
-        => FontStyleDefinition.Empty;
+    private CharacterStyleDefinition FindCharacterStyleDefinition(CharacterStyleDefinitionID id)
+        => CharacterStyleDefinition.Empty;
 }

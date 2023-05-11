@@ -18,7 +18,7 @@ public static class Program
             .AboveSpacing(2)
             .BelowSpacing(13)
             .LineSpacing(15f)
-            .Font(new FontStyle() {Family = "Arial", Size = 12})
+            .Character(new CharacterStyle() {FontFamily = "Arial", FontSize = 12})
             .ListStyle(new ListStyle() {Indentation = 20f})
             .Build();
         ;
@@ -131,8 +131,8 @@ public static class Program
     {
         var s = style.Apply(characterSpan.Style);
         var res = new StringBuilder();
-        res.Append(Inspect($"Font:{s.Font}"));
-        res.Append($"<span style=\"font-family:{s.Font.Family}\">{characterSpan.Characters}</span>");
+        res.Append(Inspect($"Character:{s.Character}"));
+        res.Append($"<span style=\"font-family:{s.Character.FontFamily}\">{characterSpan.Characters}</span>");
         return res;
     }
 
@@ -192,8 +192,8 @@ public static class Program
         res.Style =
             random.NextSingle() < 0.5
                 ? new() {
-                    Size = random.NextSingle() * 15 + 50,
-                    Family = random.NextSingle() < 0.5f ? "Times New Roman" : "Courier New",
+                    FontSize = random.NextSingle() * 15 + 50,
+                    FontFamily = random.NextSingle() < 0.5f ? "Times New Roman" : "Courier New",
                 }
                 : new();
         return res;

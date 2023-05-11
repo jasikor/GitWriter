@@ -19,7 +19,7 @@ public class ListStyleDefinitionID : StyleDefinitionId
     public static readonly ListStyleDefinitionID Default = new() {Id = "Default List Style"};
 }
 
-public class FontStyleDefinitionID : StyleDefinitionId
+public class CharacterStyleDefinitionID : StyleDefinitionId
 {
-    public static readonly FontStyleDefinitionID Default = new() {Id = "Default Character Style"};
+    public static readonly CharacterStyleDefinitionID Default = new() {Id = "Default Character Style"};
 }
