@@ -14,6 +14,12 @@ public class ParagraphStyleDefinitionID : StyleDefinitionId
     public static readonly ParagraphStyleDefinitionID Title = new() {Id = "Title"};
 }
 
-public class ListStyleDefinitionID : StyleDefinitionId { }
+public class ListStyleDefinitionID : StyleDefinitionId
+{
+    public static readonly ListStyleDefinitionID Default = new() {Id = "Default List Style"};
+}
 
-public class FontStyleDefinitionID : StyleDefinitionId { }
+public class FontStyleDefinitionID : StyleDefinitionId
+{
+    public static readonly FontStyleDefinitionID Default = new() {Id = "Default Character Style"};
+}
