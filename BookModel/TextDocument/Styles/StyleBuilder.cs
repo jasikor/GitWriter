@@ -1,6 +1,6 @@
 ﻿namespace BookModel.TextDocument.Styles;
 
-public class StyleBuilder 
+public class StyleBuilder
 {
     private float _aboveSpacing;
     private float _lineSpacing;
@@ -24,22 +24,26 @@ public class StyleBuilder
     {
         _aboveSpacing = s;
         return this;
-    } public StyleBuilder BelowSpacing(float s)
+    }
+
+    public StyleBuilder BelowSpacing(float s)
     {
         _belowSpacing = s;
         return this;
     }
+
     public StyleBuilder LineSpacing(float s)
     {
         _lineSpacing = s;
         return this;
     }
+
     public StyleBuilder CharacterStyle(CharacterStyle s)
     {
         _characterStyle = s;
         return this;
     }
-    
+
     public StyleBuilder ListStyle(ListStyle s)
     {
         _listStyle = s;

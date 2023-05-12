@@ -1,8 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text;
-using System.Text.Json;
 using BookModel.TextDocument;
 using BookModel.TextDocument.StyleDefinitions;
 using BookModel.TextDocument.Styles;
@@ -12,7 +9,7 @@ namespace Sandbox;
 
 public static class Program
 {
-    public static int Main(string[] args)
+    public static void Main(string[] args)
     {
         var doc = CreateDocument();
 
@@ -30,7 +27,6 @@ public static class Program
             .Append(docFoot);
 
         SaveRendered(res);
-        return 0;
     }
 
     private static DocumentStyle GetDefaultStyle() =>
@@ -168,7 +164,7 @@ public static class Program
         var foot = $"</span>";
 
         return new StringBuilder()
-            .Inspect($"CharacterStyleId: {characterSpan.CharacterStyleDefinitionId.Match(s => s.Id, "None")}" )
+            .Inspect($"CharacterStyleId: {characterSpan.CharacterStyleDefinitionId.Match(s => s.Id, "None")}")
             .Inspect($"Character:{s.CharacterStyle}")
             .Append(head)
             .Append(cont)
@@ -223,21 +219,20 @@ public static class Program
         return res;
     }
 
-    private static ParagraphSection CreateParagraphSection()
-    {
-        var res = new ParagraphSection() {ParagraphStyleId = ParagraphStyleDefinitionID.Default};
-        res.Spans.Add(CreateCharacterSpan("Span pierwszy"));
-        res.Spans.Add(CreateCharacterSpan(" i tu drugi"));
-        res.ParagraphStyle =
-            random.NextSingle() < 0.5
-                ? new() {
-                    LineSpacing = random.NextSingle() * 15f,
-                    SpacingBelow = Option<float>.None, //random.NextSingle() * 10f,
-                    SpacingAbove = 3.3f,
-                }
-                : new();
-        return res;
-    }
+    private static ParagraphSection CreateParagraphSection() =>
+        new ParagraphSectionBuilder()
+            .AddCharacterSpan(CreateCharacterSpan("Span pierwszy"))
+            .AddCharacterSpan(CreateCharacterSpan(" i tu drugi"))
+            .ParagraphStyle(
+                random.NextSingle() < 0.5
+                    ? new() {
+                        LineSpacing = random.NextSingle() * 15f,
+                        SpacingBelow = Option<float>.None, //random.NextSingle() * 10f,
+                        SpacingAbove = 3.3f,
+                    }
+                    : new())
+            .ParagraphStyleId( ParagraphStyleDefinitionID.Default)
+            .Build();
 
     private static CharacterSpan CreateCharacterSpan(string s) =>
         new CharacterSpan {
@@ -247,6 +242,7 @@ public static class Program
                     FontSize = random.NextSingle() * 15 + 50,
                     FontFamily = random.NextSingle() < 0.5f ? "Times New Roman" : "Courier New",
                 }
-                : new()
+                : new(),
+            CharacterStyleDefinitionId = CharacterStyleDefinitionID.Default
         };
 }
