@@ -2,6 +2,7 @@
 
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
 using BookModel.TextDocument;
 using BookModel.TextDocument.Styles;
 using LanguageExt;
@@ -13,35 +14,63 @@ public static class Program
     public static int Main(string[] args)
     {
         var doc = CreateDocument();
-        var defaultStyleBuilder = new StyleBuilder();
-        var defaultStyle = defaultStyleBuilder
+
+        SaveDocOnDesktopAsJson(doc);
+
+        var defaultStyle = GetDefaultStyle();
+        var styleManager = new StylesManager();
+
+        var docHead = GetHead();
+        var docBody = Render(doc, defaultStyle, styleManager);
+        var docFoot = GetFoot();
+
+        var res = new StringBuilder()
+            .Append(docHead)
+            .Append(docBody)
+            .Append(docFoot);
+
+
+        SaveRendered(res);
+        return 0;
+    }
+
+    private static string GetFoot() => "</body></html>";
+
+    private static string GetHead() =>
+        $"<!DOCTYPE html><html> <head><title>Page Title {DateTime.Now}</title></head>" +
+        $"<body  style=\"font-family:iA Writer Quattro V Regular, Courier New\">\n";
+
+    private static DocumentStyle GetDefaultStyle()
+    {
+        return new StyleBuilder()
             .AboveSpacing(2)
             .BelowSpacing(13)
             .LineSpacing(15f)
             .CharacterStyle(new CharacterStyle() {FontFamily = "Arial", FontSize = 12})
             .ListStyle(new ListStyle() {Indentation = 20f})
             .Build();
-        ;
-        var styleManager = new StylesManager();
+    }
 
-        var res = new StringBuilder();
-        res.Append(
-            $"<!DOCTYPE html><html> <head><title>Page Title {DateTime.Now}</title></head><body  style=\"font-family:iA Writer Quattro V Regular, Courier New\">\n");
-
-        res.Append(Render(doc, defaultStyle, styleManager));
-
-
-        res.Append("</body></html>");
+    private static void SaveRendered(StringBuilder res)
+    {
         Console.WriteLine(res);
         File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\gupie.html",
             res.ToString());
-        return 0;
+    }
+
+    private static void SaveDocOnDesktopAsJson(Document doc)
+    {
+        var serialized = JsonSerializer.Serialize(doc,
+            new JsonSerializerOptions {WriteIndented = true, IncludeFields = true, MaxDepth = 10});
+        File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\gupie.json",
+            serialized);
     }
 
     private static StringBuilder Render(Document doc, DocumentStyle defaultStyle, StylesManager stylesManager)
     {
         StringBuilder res = new StringBuilder();
         res.Append(Inspect(defaultStyle.ToString()));
+
         foreach (var d in doc.Items) {
             res.Append(RenderDocSection(d, defaultStyle, stylesManager));
             res.Append("\n");
@@ -51,20 +80,22 @@ public static class Program
     }
 
     private static string Inspect(string s) =>
-        $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; background-color: #f8f8f8; margin: 1px\">{s}</p>";
+        $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; " +
+        $"background-color: #f8f8f8; margin: 1px\">{s}</p>";
 
     private static StringBuilder RenderDocSection(DocumentSection documentSection, DocumentStyle style,
         StylesManager stylesManager)
     {
         var s = stylesManager
-            .Apply(style, documentSection.ParagraphStyleId)
-            .Apply(documentSection.VerticalSpacing);
+            .ApplyStyleId(style, documentSection.ParagraphStyleId)
+            .ApplyStyleDefinition(documentSection.VerticalSpacing);
+
         var res = new StringBuilder();
         res.Append(Inspect($"Above: {s.SpacingAbove}"));
 
         res.Append($"<div style=\"margin: {style.SpacingAbove}px 0px {style.LineSpacing}px \">");
         res.Append(documentSection switch {
-            ParagraphSection par => RenderParagraph(par, s),
+            ParagraphSection par => RenderParagraph(par, s, stylesManager),
             ListSection list => RenderList(list, s, stylesManager),
             _ => new UnreachableException()
         });
@@ -79,31 +110,32 @@ public static class Program
         var res = new StringBuilder();
         res.Append("<div style=\"overflow:auto;\">");
 
-        var s = stylesManager.Apply(style,list.ListStyleId);
+        var s = stylesManager
+            .ApplyStyleId(style, list.ListStyleId)
+            .ApplyStyleDefinition(list.ListStyle);
         res.Append("<div style=\"float: left; width: 10%;\">");
         res.Append(Inspect($"Indentation: {s.ListStyle.Indentation}"));
         res.Append(RenderBullet());
         res.Append("</div>");
 
         res.Append("<div style=\"float: right; width: 90%;\">");
-        res.Append(RenderIntendedContent(list, style, stylesManager));
+        res.Append(RenderIntendedContent(list.FirstParagraph, list.Sections, style, stylesManager));
         res.Append("</div>");
 
         res.Append("</div>");
         return res;
     }
 
-    private static StringBuilder RenderIntendedContent(ListSection list, DocumentStyle style, StylesManager stylesManager)
+    private static StringBuilder RenderIntendedContent(
+        ParagraphSection firstParagraph, IList<DocumentSection> sections,
+        DocumentStyle style, StylesManager stylesManager)
     {
-        var s = style.Apply(list.ListStyle);
-
         var res = new StringBuilder();
-        res.Append(Inspect($"{s.ListStyle}, Below:{s.SpacingBelow}"));
 
-        res.Append(RenderParagraph(list.FirstParagraph, s));
+        res.Append(RenderParagraph(firstParagraph, style, stylesManager));
 
 
-        foreach (var section in list.Sections) {
+        foreach (var section in sections) {
             res.Append(RenderDocSection(section, style, stylesManager));
         }
 
@@ -112,14 +144,15 @@ public static class Program
 
     private static string RenderBullet() => "\x2022";
 
-    private static StringBuilder RenderParagraph(ParagraphSection par, DocumentStyle style)
+    private static StringBuilder RenderParagraph(ParagraphSection par, DocumentStyle style,
+        StylesManager stylesManager)
     {
-        var st = style.Apply(par.ParagraphStyle);
+        var st = style.ApplyStyleDefinition(par.ParagraphStyle);
         var res = new StringBuilder();
         res.Append("<p style=\"margin: 0px\">");
         res.Append(Inspect($"LineSpacing: {st.LineSpacing}"));
         foreach (var s in par.Spans)
-            res.Append(RenderSpan(s, st));
+            res.Append(RenderSpan(s, st, stylesManager));
 
         res.Append("</p>");
         res.Append(Inspect($"Below: {st.SpacingBelow}"));
@@ -127,9 +160,12 @@ public static class Program
         return res;
     }
 
-    private static StringBuilder RenderSpan(CharacterSpan characterSpan, DocumentStyle style)
+    private static StringBuilder RenderSpan(CharacterSpan characterSpan, DocumentStyle style,
+        StylesManager stylesManager)
     {
-        var s = style.Apply(characterSpan.Style);
+        var s = stylesManager
+            .ApplyStyleId(style, characterSpan.CharacterStyleDefinitionId)
+            .ApplyStyleDefinition(characterSpan.Style);
         var res = new StringBuilder();
         res.Append(Inspect($"Character:{s.CharacterStyle}"));
         res.Append($"<span style=\"font-family:{s.CharacterStyle.FontFamily}\">{characterSpan.Characters}</span>");

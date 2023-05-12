@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text;
-using BookModel.TextDocument.StyleDefinitions;
+﻿using BookModel.TextDocument.StyleDefinitions;
 using LanguageExt;
 
 namespace BookModel.TextDocument.Styles;
@@ -16,18 +14,14 @@ public class StylesManager
             {ParagraphStyleDefinitionID.Title, new() {Character = new() {FontSize = 20}}},
         };
 
-    public DocumentStyle Apply(DocumentStyle ds, Option<ParagraphStyleDefinitionID> definitionId) =>
-        definitionId.Match(di => ds.Apply(FindParagraphStyleDefinition(di)), ds);
- public DocumentStyle Apply(DocumentStyle ds, Option<ListStyleDefinitionID> definitionId) =>
-        definitionId.Match(di => ds.Apply(FindListStyleDefinition(di)), ds);
+    public DocumentStyle ApplyStyleId(DocumentStyle ds, Option<ParagraphStyleDefinitionID> definitionId) =>
+        definitionId.Match(di => ds.ApplyStyleDefinition(FindParagraphStyleDefinition(di)), ds);
 
-    public DocumentStyle Apply(DocumentStyle ds, StyleDefinitionId definitionId) =>
-        definitionId switch {
-            ParagraphStyleDefinitionID pd => ds.Apply(FindParagraphStyleDefinition(pd)),
-            ListStyleDefinitionID ld => ds.Apply(FindListStyleDefinition(ld)),
-            CharacterStyleDefinitionID fd => ds.Apply(FindCharacterStyleDefinition(fd)),
-            _ => throw new UnreachableException()
-        };
+    public DocumentStyle ApplyStyleId(DocumentStyle ds, Option<ListStyleDefinitionID> definitionId) =>
+        definitionId.Match(di => ds.ApplyStyleDefinition(FindListStyleDefinition(di)), ds);
+
+    public DocumentStyle ApplyStyleId(DocumentStyle ds, Option<CharacterStyleDefinitionID> definitionId) =>
+        definitionId.Match(di => ds.ApplyStyleDefinition(FindCharacterStyleDefinition(di)), ds);
 
     private ParagraphStyleDefinition FindParagraphStyleDefinition(ParagraphStyleDefinitionID id)
     {

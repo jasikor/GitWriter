@@ -14,7 +14,7 @@ public record DocumentStyle
 
 public static class DocumentStyleExt
 {
-    public static DocumentStyle Apply(this DocumentStyle ds, StyleDefinition definition) =>
+    public static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds, StyleDefinition definition) =>
         definition switch {
             VerticalSpacingStyleDefinition vsd => ds.ApplyStyleDefinition(vsd),
             ParagraphStyleDefinition psd => ds.ApplyStyleDefinition(psd),
