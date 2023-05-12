@@ -196,28 +196,27 @@ public static class Program
 
     private static readonly Random random = new Random();
 
-    private static ListSection CreateListSection()
-    {
-        var res = new ListSection() {
-            ParagraphStyleId = ParagraphStyleDefinitionID.Heading1,
-            ListStyleId = ListStyleDefinitionID.Default
-        };
-        res.FirstParagraph.Spans.Add(CreateCharacterSpan("pierwszy paragraf listy "));
-        res.FirstParagraph.Spans.Add(CreateCharacterSpan("drugi span pierwszego paragrafu listy"));
-        res.FirstParagraph.ParagraphStyle = new() {
-            LineSpacing = random.NextSingle() * 15f + 100f,
-            SpacingAbove = 3.3f,
-            SpacingBelow = 4.4f,
-        };
-        res.ListStyle = random.NextSingle() < 0.5
-            ? new() {Indentation = random.NextSingle() * 30f}
-            : new();
-        for (int i = random.Next(0, 9); i > 0; i--)
-            res.Sections.Add(random.NextSingle() < 0.8
+    private static ListSection CreateListSection() =>
+        new ListSectionBuilder()
+            .ParagraphStyleId(ParagraphStyleDefinitionID.Heading1)
+            .ListStyleId(ListStyleDefinitionID.Default)
+            .FirstParagraph(
+                new ParagraphSectionBuilder()
+                    .ParagraphStyle(new() {
+                        LineSpacing = random.NextSingle() * 15f + 100f,
+                        SpacingAbove = 3.3f,
+                        SpacingBelow = 4.4f,
+                    })
+                    .AddCharacterSpan(CreateCharacterSpan("pierwszy paragraf listy "))
+                    .AddCharacterSpan(CreateCharacterSpan("drugi span pierwszego paragrafu listy "))
+                    .Build())
+            .ListStyle(random.NextSingle() < 0.5
+                ? new() {Indentation = random.NextSingle() * 30f}
+                : new())
+            .AddSection(random.NextSingle() < 0.8
                 ? CreateParagraphSection()
-                : CreateListSection());
-        return res;
-    }
+                : CreateListSection())
+            .Build();
 
     private static ParagraphSection CreateParagraphSection() =>
         new ParagraphSectionBuilder()
@@ -231,7 +230,7 @@ public static class Program
                         SpacingAbove = 3.3f,
                     }
                     : new())
-            .ParagraphStyleId( ParagraphStyleDefinitionID.Default)
+            .ParagraphStyleId(ParagraphStyleDefinitionID.Default)
             .Build();
 
     private static CharacterSpan CreateCharacterSpan(string s) =>

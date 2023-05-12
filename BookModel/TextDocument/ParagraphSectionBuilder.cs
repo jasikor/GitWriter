@@ -8,14 +8,12 @@ public class ParagraphSectionBuilder
     private IList<CharacterSpan> _spans = new List<CharacterSpan>();
     private ParagraphStyleDefinitionID _paragraphStyleDefinitionId;
 
-    public ParagraphSection Build()
-    {
-        return new ParagraphSection() {
+    public ParagraphSection Build() =>
+        new ParagraphSection() {
             ParagraphStyle = _paragraphStyleDefinition,
             Spans = _spans,
             ParagraphStyleId = _paragraphStyleDefinitionId,
         };
-    }
 
     public ParagraphSectionBuilder ParagraphStyle(ParagraphStyleDefinition s)
     {
