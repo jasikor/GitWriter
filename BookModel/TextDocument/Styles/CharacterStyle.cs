@@ -2,6 +2,6 @@
 
 public record CharacterStyle
 {
-    public string FontFamily;
+    public string FontFamily = string.Empty;
     public float FontSize;
 }

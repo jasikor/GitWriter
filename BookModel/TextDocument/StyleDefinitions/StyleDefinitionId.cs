@@ -2,7 +2,7 @@
 
 public abstract class StyleDefinitionId
 {
-    public string Id;
+    public string Id = string.Empty;
 }
 
 public class ParagraphStyleDefinitionID : StyleDefinitionId

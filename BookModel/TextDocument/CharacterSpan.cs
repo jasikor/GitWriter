@@ -1,5 +1,4 @@
 ﻿using BookModel.TextDocument.StyleDefinitions;
-using BookModel.TextDocument.Styles;
 using LanguageExt;
 
 namespace BookModel.TextDocument;
@@ -7,6 +6,6 @@ namespace BookModel.TextDocument;
 public class CharacterSpan
 {
     public Option<CharacterStyleDefinitionID> CharacterStyleDefinitionId;
-    public CharacterStyleDefinition Style = new();
-    public string Characters;
+    public CharacterStyleDefinition CharacterStyle = new();
+    public string Characters = string.Empty;
 }

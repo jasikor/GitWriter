@@ -165,7 +165,7 @@ public static class Program
     {
         var s = stylesManager
             .ApplyStyleId(style, characterSpan.CharacterStyleDefinitionId)
-            .ApplyStyleDefinition(characterSpan.Style);
+            .ApplyStyleDefinition(characterSpan.CharacterStyle);
         var res = new StringBuilder();
         res.Append(Inspect($"Character:{s.CharacterStyle}"));
         res.Append($"<span style=\"font-family:{s.CharacterStyle.FontFamily}\">{characterSpan.Characters}</span>");
@@ -225,7 +225,7 @@ public static class Program
     {
         var res = new CharacterSpan();
         res.Characters = s;
-        res.Style =
+        res.CharacterStyle =
             random.NextSingle() < 0.5
                 ? new() {
                     FontSize = random.NextSingle() * 15 + 50,
