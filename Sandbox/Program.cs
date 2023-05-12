@@ -80,9 +80,9 @@ public static class Program
         return res;
     }
 
-    private static string Inspect(string s) =>
-        $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; " +
-        $"background-color: #f8f8f8; margin: 1px\">{s}</p>";
+    private static string Inspect(string s) =>      "";
+        // $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; " +
+        // $"background-color: #f8f8f8; margin: 1px\">{s}</p>";
 
     private static StringBuilder RenderDocSection(DocumentSection documentSection, DocumentStyle style,
         StylesManager stylesManager)
@@ -118,7 +118,7 @@ public static class Program
         res.Append("<div style=\"float: left; width: 10%;\">");
         res.Append(Inspect($"ListStyleId: {list.ListStyleId.Match(s => s.Id, "None")}"));
         res.Append(Inspect($"Indentation: {s.ListStyle.Indentation}"));
-        res.Append(RenderBullet());
+        res.Append(RenderBullet(s));
         res.Append("</div>");
 
         res.Append("<div style=\"float: right; width: 90%;\">");
@@ -145,7 +145,7 @@ public static class Program
         return res;
     }
 
-    private static string RenderBullet() => "\x2022";
+    private static string RenderBullet(DocumentStyle s) => s.ListStyle.Bullet; 
 
     private static StringBuilder RenderParagraph(ParagraphSection par, DocumentStyle style,
         StylesManager stylesManager)
