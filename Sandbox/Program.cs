@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 using BookModel.TextDocument;
+using BookModel.TextDocument.StyleDefinitions;
 using BookModel.TextDocument.Styles;
 using LanguageExt;
 
@@ -91,6 +92,7 @@ public static class Program
             .ApplyStyleDefinition(documentSection.VerticalSpacing);
 
         var res = new StringBuilder();
+        res.Append(Inspect($"ParagraphStyleId: {documentSection.ParagraphStyleId.Match(s => s.Id, "None")}"));
         res.Append(Inspect($"Above: {s.SpacingAbove}"));
 
         res.Append($"<div style=\"margin: {style.SpacingAbove}px 0px {style.LineSpacing}px \">");
@@ -114,6 +116,7 @@ public static class Program
             .ApplyStyleId(style, list.ListStyleId)
             .ApplyStyleDefinition(list.ListStyle);
         res.Append("<div style=\"float: left; width: 10%;\">");
+        res.Append(Inspect($"ListStyleId: {list.ListStyleId.Match(s => s.Id, "None")}"));
         res.Append(Inspect($"Indentation: {s.ListStyle.Indentation}"));
         res.Append(RenderBullet());
         res.Append("</div>");
@@ -167,6 +170,8 @@ public static class Program
             .ApplyStyleId(style, characterSpan.CharacterStyleDefinitionId)
             .ApplyStyleDefinition(characterSpan.CharacterStyle);
         var res = new StringBuilder();
+        res.Append(Inspect($"CharacterStyleId: {characterSpan.CharacterStyleDefinitionId.Match(s => s.Id, "None")}"));
+
         res.Append(Inspect($"Character:{s.CharacterStyle}"));
         res.Append($"<span style=\"font-family:{s.CharacterStyle.FontFamily}\">{characterSpan.Characters}</span>");
         return res;
@@ -192,10 +197,17 @@ public static class Program
 
     private static ListSection CreateListSection()
     {
-        var res = new ListSection();
+        var res = new ListSection() {
+            ParagraphStyleId = ParagraphStyleDefinitionID.Heading1,
+            ListStyleId = ListStyleDefinitionID.Default
+        };
         res.FirstParagraph.Spans.Add(CreateCharacterSpan("pierwszy paragraf listy "));
         res.FirstParagraph.Spans.Add(CreateCharacterSpan("drugi span pierwszego paragrafu listy"));
-        res.FirstParagraph.ParagraphStyle = new() {LineSpacing = random.NextSingle() * 15f + 100f};
+        res.FirstParagraph.ParagraphStyle = new() {
+            LineSpacing = random.NextSingle() * 15f + 100f   ,
+            SpacingAbove = 3.3f,
+            SpacingBelow = 4.4f,
+        };
         res.ListStyle = random.NextSingle() < 0.5
             ? new() {Indentation = random.NextSingle() * 30f}
             : new();
@@ -208,14 +220,16 @@ public static class Program
 
     private static ParagraphSection CreateParagraphSection()
     {
-        var res = new ParagraphSection();
+        var res = new ParagraphSection() {ParagraphStyleId = ParagraphStyleDefinitionID.Default};
         res.Spans.Add(CreateCharacterSpan("Span pierwszy"));
         res.Spans.Add(CreateCharacterSpan(" i tu drugi"));
         res.ParagraphStyle =
             random.NextSingle() < 0.5
                 ? new() {
                     LineSpacing = random.NextSingle() * 15f,
-                    SpacingBelow = Option<float>.None //random.NextSingle() * 10f,
+                    SpacingBelow = Option<float>.None, //random.NextSingle() * 10f,
+                    SpacingAbove = 3.3f,
+                    
                 }
                 : new();
         return res;
