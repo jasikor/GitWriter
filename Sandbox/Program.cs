@@ -58,7 +58,7 @@ public static class Program
             .Fold(new StringBuilder(), (a, sb) => a.Append(sb));
 
         return new StringBuilder()
-            .Append(Inspect(defaultStyle.ToString()))
+            .Inspect(defaultStyle.ToString())
             .Append(sections);
     }
 
@@ -81,8 +81,8 @@ public static class Program
         var foot = "</div>\n";
 
         return new StringBuilder()
-            .Append(Inspect($"ParagraphStyleId: {documentSection.ParagraphStyleId.Match(s => s.Id, "None")}"))
-            .Append(Inspect($"Above: {s.SpacingAbove}"))
+            .Inspect($"ParagraphStyleId: {documentSection.ParagraphStyleId.Match(s => s.Id, "None")}")
+            .Inspect($"Above: {s.SpacingAbove}")
             .Append(head)
             .Append(content)
             .Append(foot);
@@ -108,8 +108,8 @@ public static class Program
 
         return new StringBuilder()
             .Append(head)
-            .Append(Inspect($"ListStyleId: {list.ListStyleId.Match(s => s.Id, "None")}"))
-            .Append(Inspect($"Indentation: {s.ListStyle.Indentation}"))
+            .Inspect($"ListStyleId: {list.ListStyleId.Match(s => s.Id, "None")}")
+            .Inspect($"Indentation: {s.ListStyle.Indentation}")
             .Append(bulletHead)
             .Append(bullet)
             .Append(bulletFoot)
@@ -150,8 +150,8 @@ public static class Program
 
         return new StringBuilder()
             .Append(head)
-            .Append(Inspect($"LineSpacing: {st.LineSpacing}"))
-            .Append(Inspect($"Below: {st.SpacingBelow}"))
+            .Inspect($"LineSpacing: {st.LineSpacing}")
+            .Inspect($"Below: {st.SpacingBelow}")
             .Append(cont)
             .Append(foot);
     }
@@ -168,8 +168,8 @@ public static class Program
         var foot = $"</span>";
 
         return new StringBuilder()
-            .Append(Inspect($"CharacterStyleId: {characterSpan.CharacterStyleDefinitionId.Match(s => s.Id, "None")}"))
-            .Append(Inspect($"Character:{s.CharacterStyle}"))
+            .Inspect($"CharacterStyleId: {characterSpan.CharacterStyleDefinitionId.Match(s => s.Id, "None")}" )
+            .Inspect($"Character:{s.CharacterStyle}")
             .Append(head)
             .Append(cont)
             .Append(foot);
@@ -177,9 +177,10 @@ public static class Program
 
     /**************************************************************************************/
 
-    private static string Inspect(string s) =>
-        $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; " +
-        $"background-color: #f8f8f8; margin: 1px\">{s}</p>\n";
+    private static StringBuilder Inspect(this StringBuilder sb, string s) =>
+        sb.Append(
+            $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; " +
+            $"background-color: #f8f8f8; margin: 1px\">{s}</p>\n");
 
 /*******************************************************************************************/
     private static Document CreateDocument()
