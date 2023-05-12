@@ -235,17 +235,14 @@ public static class Program
         return res;
     }
 
-    private static CharacterSpan CreateCharacterSpan(string s)
-    {
-        var res = new CharacterSpan();
-        res.Characters = s;
-        res.CharacterStyle =
-            random.NextSingle() < 0.5
+    private static CharacterSpan CreateCharacterSpan(string s) =>
+        new CharacterSpan {
+            Characters = s,
+            CharacterStyle = random.NextSingle() < 0.5
                 ? new() {
                     FontSize = random.NextSingle() * 15 + 50,
                     FontFamily = random.NextSingle() < 0.5f ? "Times New Roman" : "Courier New",
                 }
-                : new();
-        return res;
-    }
+                : new()
+        };
 }
