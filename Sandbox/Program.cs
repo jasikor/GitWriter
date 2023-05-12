@@ -16,8 +16,6 @@ public static class Program
     {
         var doc = CreateDocument();
 
-        SaveDocOnDesktopAsJson(doc);
-
         var defaultStyle = GetDefaultStyle();
         var styleManager = new StylesManager();
 
@@ -35,36 +33,26 @@ public static class Program
         return 0;
     }
 
-    private static string GetFoot() => "</body></html>";
+    private static string GetFoot() => "</body>\n</html>";
 
     private static string GetHead() =>
-        $"<!DOCTYPE html><html> <head><title>Page Title {DateTime.Now}</title></head>" +
+        $"<!DOCTYPE html><html> <head><title>Page Title {DateTime.Now}</title></head>\n" +
         $"<body  style=\"font-family:iA Writer Quattro V Regular, Courier New\">\n";
 
-    private static DocumentStyle GetDefaultStyle()
-    {
-        return new StyleBuilder()
+    private static DocumentStyle GetDefaultStyle() =>
+        new StyleBuilder()
             .AboveSpacing(2)
             .BelowSpacing(13)
             .LineSpacing(15f)
             .CharacterStyle(new CharacterStyle() {FontFamily = "Arial", FontSize = 12})
             .ListStyle(new ListStyle() {Indentation = 20f})
             .Build();
-    }
 
     private static void SaveRendered(StringBuilder res)
     {
         Console.WriteLine(res);
         File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\gupie.html",
             res.ToString());
-    }
-
-    private static void SaveDocOnDesktopAsJson(Document doc)
-    {
-        var serialized = JsonSerializer.Serialize(doc,
-            new JsonSerializerOptions {WriteIndented = true, IncludeFields = true, MaxDepth = 10});
-        File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\gupie.json",
-            serialized);
     }
 
     /**********************************************************************************/
@@ -96,7 +84,7 @@ public static class Program
             _ => new UnreachableException()
         };
 
-        var foot = "</div>";
+        var foot = "</div>\n";
 
         return new StringBuilder()
             .Append(Inspect($"ParagraphStyleId: {documentSection.ParagraphStyleId.Match(s => s.Id, "None")}"))
@@ -116,13 +104,13 @@ public static class Program
 
         var bulletHead = "<div style=\"float: left; width: 10%;\">";
         var bullet = RenderBullet(s);
-        var bulletFoot = "</div>";
+        var bulletFoot = "</div>\n";
 
         var indentedHead = "<div style=\"float: right; width: 90%;\">";
         var indentedContet = RenderIndentedContent(list.FirstParagraph, list.Sections, style, stylesManager);
-        var indetedFoot = "</div>";
+        var indetedFoot = "</div>\n";
 
-        var foot = "</div>";
+        var foot = "</div>\n";
 
         return new StringBuilder()
             .Append(head)
@@ -164,7 +152,7 @@ public static class Program
             .Select(s => RenderSpan(s, st, stylesManager))
             .Fold(new StringBuilder(), (a, sb) => a.Append(sb));
 
-        var foot = "</p>";
+        var foot = "</p>\n";
 
         return new StringBuilder()
             .Append(head)
@@ -197,7 +185,7 @@ public static class Program
 
     private static string Inspect(string s) =>
         $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; " +
-        $"background-color: #f8f8f8; margin: 1px\">{s}</p>";
+        $"background-color: #f8f8f8; margin: 1px\">{s}</p>\n";
 
 /*******************************************************************************************/
     private static Document CreateDocument()
