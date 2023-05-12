@@ -67,22 +67,19 @@ public static class Program
             serialized);
     }
 
+    /**********************************************************************************/
+
     private static StringBuilder Render(Document doc, DocumentStyle defaultStyle, StylesManager stylesManager)
     {
-        StringBuilder res = new StringBuilder();
-        res.Append(Inspect(defaultStyle.ToString()));
+        var sections = doc.Items
+            .Select(d => RenderDocSection(d, defaultStyle, stylesManager))
+            .Fold(new StringBuilder(), (a, sb) => a.Append(sb));
 
-        foreach (var d in doc.Items) {
-            res.Append(RenderDocSection(d, defaultStyle, stylesManager));
-            res.Append("\n");
-        }
-
-        return res;
+        return new StringBuilder()
+            .Append(Inspect(defaultStyle.ToString()))
+            .Append(sections);
     }
 
-    private static string Inspect(string s) =>      "";
-        // $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; " +
-        // $"background-color: #f8f8f8; margin: 1px\">{s}</p>";
 
     private static StringBuilder RenderDocSection(DocumentSection documentSection, DocumentStyle style,
         StylesManager stylesManager)
@@ -91,76 +88,90 @@ public static class Program
             .ApplyStyleId(style, documentSection.ParagraphStyleId)
             .ApplyStyleDefinition(documentSection.VerticalSpacing);
 
-        var res = new StringBuilder();
-        res.Append(Inspect($"ParagraphStyleId: {documentSection.ParagraphStyleId.Match(s => s.Id, "None")}"));
-        res.Append(Inspect($"Above: {s.SpacingAbove}"));
+        var head = $"<div style=\"margin: {style.SpacingAbove}px 0px {style.LineSpacing}px \">";
 
-        res.Append($"<div style=\"margin: {style.SpacingAbove}px 0px {style.LineSpacing}px \">");
-        res.Append(documentSection switch {
+        object content = documentSection switch {
             ParagraphSection par => RenderParagraph(par, s, stylesManager),
             ListSection list => RenderList(list, s, stylesManager),
             _ => new UnreachableException()
-        });
+        };
 
-        res.Append("</div>");
+        var foot = "</div>";
 
-        return res;
+        return new StringBuilder()
+            .Append(Inspect($"ParagraphStyleId: {documentSection.ParagraphStyleId.Match(s => s.Id, "None")}"))
+            .Append(Inspect($"Above: {s.SpacingAbove}"))
+            .Append(head)
+            .Append(content)
+            .Append(foot);
     }
 
     private static StringBuilder RenderList(ListSection list, DocumentStyle style, StylesManager stylesManager)
     {
-        var res = new StringBuilder();
-        res.Append("<div style=\"overflow:auto;\">");
-
         var s = stylesManager
             .ApplyStyleId(style, list.ListStyleId)
             .ApplyStyleDefinition(list.ListStyle);
-        res.Append("<div style=\"float: left; width: 10%;\">");
-        res.Append(Inspect($"ListStyleId: {list.ListStyleId.Match(s => s.Id, "None")}"));
-        res.Append(Inspect($"Indentation: {s.ListStyle.Indentation}"));
-        res.Append(RenderBullet(s));
-        res.Append("</div>");
 
-        res.Append("<div style=\"float: right; width: 90%;\">");
-        res.Append(RenderIntendedContent(list.FirstParagraph, list.Sections, style, stylesManager));
-        res.Append("</div>");
+        var head = "<div style=\"overflow:auto;\">";
 
-        res.Append("</div>");
-        return res;
+        var bulletHead = "<div style=\"float: left; width: 10%;\">";
+        var bullet = RenderBullet(s);
+        var bulletFoot = "</div>";
+
+        var indentedHead = "<div style=\"float: right; width: 90%;\">";
+        var indentedContet = RenderIndentedContent(list.FirstParagraph, list.Sections, style, stylesManager);
+        var indetedFoot = "</div>";
+
+        var foot = "</div>";
+
+        return new StringBuilder()
+            .Append(head)
+            .Append(Inspect($"ListStyleId: {list.ListStyleId.Match(s => s.Id, "None")}"))
+            .Append(Inspect($"Indentation: {s.ListStyle.Indentation}"))
+            .Append(bulletHead)
+            .Append(bullet)
+            .Append(bulletFoot)
+            .Append(indentedHead)
+            .Append(indentedContet)
+            .Append(indetedFoot)
+            .Append(foot);
     }
 
-    private static StringBuilder RenderIntendedContent(
+    private static StringBuilder RenderIndentedContent(
         ParagraphSection firstParagraph, IList<DocumentSection> sections,
         DocumentStyle style, StylesManager stylesManager)
     {
-        var res = new StringBuilder();
+        var paragraph = RenderParagraph(firstParagraph, style, stylesManager);
 
-        res.Append(RenderParagraph(firstParagraph, style, stylesManager));
+        var sect = sections
+            .Select(s => RenderDocSection(s, style, stylesManager))
+            .Fold(new StringBuilder(), (a, sb) => a.Append(sb));
 
-
-        foreach (var section in sections) {
-            res.Append(RenderDocSection(section, style, stylesManager));
-        }
-
-        return res;
+        return new StringBuilder()
+            .Append(paragraph)
+            .Append(sect);
     }
 
-    private static string RenderBullet(DocumentStyle s) => s.ListStyle.Bullet; 
+    private static string RenderBullet(DocumentStyle s) => s.ListStyle.Bullet;
 
     private static StringBuilder RenderParagraph(ParagraphSection par, DocumentStyle style,
         StylesManager stylesManager)
     {
         var st = style.ApplyStyleDefinition(par.ParagraphStyle);
-        var res = new StringBuilder();
-        res.Append("<p style=\"margin: 0px\">");
-        res.Append(Inspect($"LineSpacing: {st.LineSpacing}"));
-        foreach (var s in par.Spans)
-            res.Append(RenderSpan(s, st, stylesManager));
 
-        res.Append("</p>");
-        res.Append(Inspect($"Below: {st.SpacingBelow}"));
+        var head = "<p style=\"margin: 0px\">";
+        var cont = par.Spans
+            .Select(s => RenderSpan(s, st, stylesManager))
+            .Fold(new StringBuilder(), (a, sb) => a.Append(sb));
 
-        return res;
+        var foot = "</p>";
+
+        return new StringBuilder()
+            .Append(head)
+            .Append(Inspect($"LineSpacing: {st.LineSpacing}"))
+            .Append(Inspect($"Below: {st.SpacingBelow}"))
+            .Append(cont)
+            .Append(foot);
     }
 
     private static StringBuilder RenderSpan(CharacterSpan characterSpan, DocumentStyle style,
@@ -169,13 +180,24 @@ public static class Program
         var s = stylesManager
             .ApplyStyleId(style, characterSpan.CharacterStyleDefinitionId)
             .ApplyStyleDefinition(characterSpan.CharacterStyle);
-        var res = new StringBuilder();
-        res.Append(Inspect($"CharacterStyleId: {characterSpan.CharacterStyleDefinitionId.Match(s => s.Id, "None")}"));
 
-        res.Append(Inspect($"Character:{s.CharacterStyle}"));
-        res.Append($"<span style=\"font-family:{s.CharacterStyle.FontFamily}\">{characterSpan.Characters}</span>");
-        return res;
+        var head = $"<span style=\"font-family:{s.CharacterStyle.FontFamily}\">";
+        var cont = characterSpan.Characters;
+        var foot = $"</span>";
+
+        return new StringBuilder()
+            .Append(Inspect($"CharacterStyleId: {characterSpan.CharacterStyleDefinitionId.Match(s => s.Id, "None")}"))
+            .Append(Inspect($"Character:{s.CharacterStyle}"))
+            .Append(head)
+            .Append(cont)
+            .Append(foot);
     }
+
+    /**************************************************************************************/
+
+    private static string Inspect(string s) =>
+        $"<p style=\"font-family:iA Writer Quattro V Regular, Courier New; font-size: 8pt; " +
+        $"background-color: #f8f8f8; margin: 1px\">{s}</p>";
 
 /*******************************************************************************************/
     private static Document CreateDocument()
@@ -204,7 +226,7 @@ public static class Program
         res.FirstParagraph.Spans.Add(CreateCharacterSpan("pierwszy paragraf listy "));
         res.FirstParagraph.Spans.Add(CreateCharacterSpan("drugi span pierwszego paragrafu listy"));
         res.FirstParagraph.ParagraphStyle = new() {
-            LineSpacing = random.NextSingle() * 15f + 100f   ,
+            LineSpacing = random.NextSingle() * 15f + 100f,
             SpacingAbove = 3.3f,
             SpacingBelow = 4.4f,
         };
@@ -229,7 +251,6 @@ public static class Program
                     LineSpacing = random.NextSingle() * 15f,
                     SpacingBelow = Option<float>.None, //random.NextSingle() * 10f,
                     SpacingAbove = 3.3f,
-                    
                 }
                 : new();
         return res;
