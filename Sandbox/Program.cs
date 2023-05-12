@@ -19,25 +19,19 @@ public static class Program
         var defaultStyle = GetDefaultStyle();
         var styleManager = new StylesManager();
 
-        var docHead = GetHead();
+        var docHead = $"<!DOCTYPE html><html> <head><title>Page Title {DateTime.Now}</title></head>\n" +
+                      $"<body  style=\"font-family:iA Writer Quattro V Regular, Courier New\">\n";
         var docBody = Render(doc, defaultStyle, styleManager);
-        var docFoot = GetFoot();
+        var docFoot = "</body>\n</html>";
 
         var res = new StringBuilder()
             .Append(docHead)
             .Append(docBody)
             .Append(docFoot);
 
-
         SaveRendered(res);
         return 0;
     }
-
-    private static string GetFoot() => "</body>\n</html>";
-
-    private static string GetHead() =>
-        $"<!DOCTYPE html><html> <head><title>Page Title {DateTime.Now}</title></head>\n" +
-        $"<body  style=\"font-family:iA Writer Quattro V Regular, Courier New\">\n";
 
     private static DocumentStyle GetDefaultStyle() =>
         new StyleBuilder()
