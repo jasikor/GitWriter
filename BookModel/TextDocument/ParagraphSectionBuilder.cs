@@ -4,31 +4,26 @@ namespace BookModel.TextDocument;
 
 public class ParagraphSectionBuilder
 {
-    private ParagraphStyleDefinition _paragraphStyleDefinition;
-    private IList<CharacterSpan> _spans = new List<CharacterSpan>();
-    private ParagraphStyleDefinitionID _paragraphStyleDefinitionId;
+    private ParagraphSection _paragraphSection = new();
 
     public ParagraphSection Build() =>
-        new ParagraphSection() {
-            ParagraphStyle = _paragraphStyleDefinition,
-            Spans = _spans,
-            ParagraphStyleId = _paragraphStyleDefinitionId,
-        };
+        _paragraphSection;
 
     public ParagraphSectionBuilder ParagraphStyle(ParagraphStyleDefinition s)
     {
-        _paragraphStyleDefinition = s;
+        _paragraphSection.ParagraphStyle = s;
         return this;
     }
+
     public ParagraphSectionBuilder AddCharacterSpan(CharacterSpan s)
     {
-        _spans.Add(s);
+        _paragraphSection.Spans.Add(s);
         return this;
     }
 
     public ParagraphSectionBuilder ParagraphStyleId(ParagraphStyleDefinitionID id)
     {
-        _paragraphStyleDefinitionId = id;
+        _paragraphSection.ParagraphStyleId = id;
         return this;
     }
 }
