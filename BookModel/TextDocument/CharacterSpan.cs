@@ -6,6 +6,6 @@ namespace BookModel.TextDocument;
 public class CharacterSpan
 {
     public Option<CharacterStyleDefinitionID> CharacterStyleDefinitionId;
-    public CharacterStyleDefinition CharacterStyle = new();
+    public Option<CharacterStyleDefinition> CharacterStyle;
     public string Characters = string.Empty;
 }

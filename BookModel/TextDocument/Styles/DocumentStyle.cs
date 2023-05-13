@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using BookModel.TextDocument.StyleDefinitions;
+using LanguageExt;
 
 namespace BookModel.TextDocument.Styles;
 
@@ -14,49 +15,59 @@ public record DocumentStyle
 
 public static class DocumentStyleExt
 {
-    public static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds, StyleDefinition definition) =>
-        definition switch {
-            VerticalSpacingStyleDefinition vsd => ds.ApplyStyleDefinition(vsd),
-            ParagraphStyleDefinition psd => ds.ApplyStyleDefinition(psd),
-            CharacterStyleDefinition csd => ds.ApplyStyleDefinition(csd),
-            ListStyleDefinition lsd => ds.ApplyStyleDefinition(lsd),
-            _ => throw new UnreachableException(),
-        };
+    public static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
+        Option<VerticalSpacingStyleDefinition> definition) =>
+        definition
+            .Match(
+                vs => ds with {
+                    SpacingAbove = vs.Above.IfNone(ds.SpacingAbove)
+                },
+                ds);
 
-    private static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
-        VerticalSpacingStyleDefinition definition) =>
-        ds with {
-            SpacingAbove = definition.Above.IfNone(ds.SpacingAbove)
-        };
+    public static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
+        Option<ParagraphStyleDefinition> definition) =>
+        definition
+            .Match(
+                de =>
+                    ds with {
+                            LineSpacing = de.LineSpacing.IfNone(ds.LineSpacing),
+                            SpacingBelow = de.SpacingBelow.IfNone(ds.SpacingBelow),
+                            SpacingAbove = de.SpacingAbove.IfNone(ds.SpacingAbove),
+                            CharacterStyle = ApplyCharacterStyleDefinitionReturnCharacterStyle(ds.CharacterStyle, de.Character),
+                        },
+                ds);
 
-    private static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
-        ParagraphStyleDefinition definition) =>
-        ds with {
-            LineSpacing = definition.LineSpacing.IfNone(ds.LineSpacing),
-            SpacingBelow = definition.SpacingBelow.IfNone(ds.SpacingBelow),
-            SpacingAbove = definition.SpacingAbove.IfNone(ds.SpacingAbove),
-            CharacterStyle = ApplyCharacterStyleDefinition(ds, definition.Character),
-        };
+    private static CharacterStyle ApplyCharacterStyleDefinitionReturnCharacterStyle(
+        CharacterStyle style, 
+        Option<CharacterStyleDefinition> styleDefinition) =>
+        styleDefinition.Match(sd =>
+                style with {
+                    FontSize = sd.FontSize.IfNone(style.FontSize),
+                    FontFamily = sd.FontFamily.IfNone(style.FontFamily),
+                },
+            style);
 
-    private static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
-        CharacterStyleDefinition definition) =>
-        ds with {
-            CharacterStyle = ApplyCharacterStyleDefinition(ds, definition)
-        };
+    public static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
+        Option<CharacterStyleDefinition> definition) =>
+        definition
+            .Match(de =>
+                    ds with {
+                        CharacterStyle = new CharacterStyle() {
+                            FontFamily = de.FontFamily.IfNone(ds.CharacterStyle.FontFamily),
+                            FontSize = de.FontSize.IfNone(ds.CharacterStyle.FontSize),
+                        }
+                    },
+                ds);
 
-    private static CharacterStyle ApplyCharacterStyleDefinition(DocumentStyle ds, CharacterStyleDefinition definition)
-    {
-        return ds.CharacterStyle with {
-            FontFamily = definition.FontFamily.IfNone(ds.CharacterStyle.FontFamily),
-            FontSize = definition.FontSize.IfNone(ds.CharacterStyle.FontSize),
-        };
-    }
-
-    private static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
-        ListStyleDefinition definition) =>
-        ds with {
-            ListStyle = ds.ListStyle with {
-                Indentation = definition.Indentation.IfNone(ds.ListStyle.Indentation),
-            },
-        };
+    public static DocumentStyle ApplyStyleDefinition(this DocumentStyle ds,
+        Option<ListStyleDefinition> definition) =>
+        definition
+            .Match(
+                de =>
+                    ds with {
+                        ListStyle = ds.ListStyle with {
+                            Indentation = de.Indentation.IfNone(ds.ListStyle.Indentation),
+                        },
+                    },
+                ds);
 }

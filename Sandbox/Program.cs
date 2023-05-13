@@ -22,7 +22,7 @@ public static class Program
         var defaultStyle = GetDefaultStyle();
         var styleManager = new StylesManager();
         var htmlRenderer = new HTMLRenderer(styleManager);
-
+        
         var html = htmlRenderer.Render(doc, defaultStyle);
 
         SaveRendered(html);
@@ -44,10 +44,6 @@ public static class Program
             res.ToString());
     }
 
-    /**********************************************************************************/
-
-
-    /**************************************************************************************/
 
     /*******************************************************************************************/
     private static Document CreateDocument(string title)
@@ -107,7 +103,7 @@ public static class Program
         new CharacterSpan {
             Characters = s,
             CharacterStyle = random.NextSingle() < 0.5
-                ? new() {
+                ?  new CharacterStyleDefinition() {
                     FontSize = random.NextSingle() * 15 + 50,
                     FontFamily = random.NextSingle() < 0.5f ? "Times New Roman" : "Courier New",
                 }

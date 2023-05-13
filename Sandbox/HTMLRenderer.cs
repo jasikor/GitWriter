@@ -1,19 +1,18 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using BookModel.TextDocument;
+using BookModel.TextDocument.StyleDefinitions;
 using BookModel.TextDocument.Styles;
+using LanguageExt;
+using LanguageExt.Pipes;
 
 namespace Sandbox;
 
-public class DocumentRenderer
-{
-    
-}
 public class HTMLRenderer
 {
-    private readonly StylesManager _stylesManager;
+    private readonly IStylesManager _stylesManager;
 
-    public HTMLRenderer(StylesManager stylesManager)
+    public HTMLRenderer(IStylesManager stylesManager)
     {
         _stylesManager = stylesManager;
     }
