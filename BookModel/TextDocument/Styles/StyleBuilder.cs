@@ -2,51 +2,41 @@
 
 public class StyleBuilder
 {
-    private float _aboveSpacing;
-    private float _lineSpacing;
-    private CharacterStyle _characterStyle;
-    private ListStyle _listStyle;
-    private float _belowSpacing;
+    private DocumentStyle _documentStyle = new();
 
 
     public DocumentStyle Build()
     {
-        return new DocumentStyle() {
-            SpacingAbove = _aboveSpacing,
-            SpacingBelow = _belowSpacing,
-            LineSpacing = _lineSpacing,
-            CharacterStyle = _characterStyle,
-            ListStyle = _listStyle,
-        };
+        return _documentStyle;
     }
 
     public StyleBuilder AboveSpacing(float s)
     {
-        _aboveSpacing = s;
+        _documentStyle = _documentStyle with {SpacingAbove = s};
         return this;
     }
 
     public StyleBuilder BelowSpacing(float s)
     {
-        _belowSpacing = s;
+        _documentStyle = _documentStyle with {SpacingBelow = s};
         return this;
     }
 
     public StyleBuilder LineSpacing(float s)
     {
-        _lineSpacing = s;
+        _documentStyle = _documentStyle with {LineSpacing = s};
         return this;
     }
 
     public StyleBuilder CharacterStyle(CharacterStyle s)
     {
-        _characterStyle = s;
+        _documentStyle = _documentStyle with {CharacterStyle = s};
         return this;
     }
 
     public StyleBuilder ListStyle(ListStyle s)
     {
-        _listStyle = s;
+        _documentStyle = _documentStyle with {ListStyle = s};
         return this;
     }
 }
