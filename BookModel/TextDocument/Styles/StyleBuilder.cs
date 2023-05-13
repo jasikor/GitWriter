@@ -5,10 +5,7 @@ public class StyleBuilder
     private DocumentStyle _documentStyle = new();
 
 
-    public DocumentStyle Build()
-    {
-        return _documentStyle;
-    }
+    public DocumentStyle Build() => _documentStyle;
 
     public StyleBuilder AboveSpacing(float s)
     {
