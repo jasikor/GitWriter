@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using BookModel.Renderers;
 using BookModel.TextDocument;
 using BookModel.TextDocument.Styles;
+using Stubble.Core.Builders;
 
 namespace Sandbox;
 
@@ -128,19 +130,16 @@ public class HTMLRenderer
 
     private StringBuilder RenderSpan(CharacterSpan characterSpan, DocumentStyle style)
     {
-        var s = _stylesManager
-            .ApplyStyleId(style, characterSpan.CharacterStyleDefinitionId)
-            .ApplyStyleDefinition(characterSpan.CharacterStyle);
+        var data = DocRenderer.RenderSpan(characterSpan);
+        var stubble = new StubbleBuilder().Build();
+        string output = stubble.Render("<span" +
+                                    "{{#Class}} class=\"{{Class}}\"{{/Class}}" +
+                                    "{{#Style}} style=\"" +
+                                    "{{#FontFamily}}font-family:{{FontFamily}};{{/FontFamily}}" +
+                                    "{{#FontSize}}font-size:{{FontSize}};{{/FontSize}}" +
+                                    "\"{{/Style}}" +
+                                    ">{{Characters}}</span>", data);
 
-        var head = $"<span style=\"font-family:{s.CharacterStyle.FontFamily}\">";
-        var cont = characterSpan.Characters;
-        var foot = $"</span>";
-
-        return new StringBuilder()
-            .Inspect($"CharacterStyleId: {characterSpan.CharacterStyleDefinitionId.Match(s => s.Id, "None")}")
-            .Inspect($"Character:{s.CharacterStyle}")
-            .Append(head)
-            .Append(cont)
-            .Append(foot);
+        return new StringBuilder(output);
     }
 }
