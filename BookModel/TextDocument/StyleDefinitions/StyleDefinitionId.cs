@@ -7,11 +7,11 @@ public abstract class StyleDefinitionId
 
 public class ParagraphStyleDefinitionID : StyleDefinitionId
 {
-    public static readonly ParagraphStyleDefinitionID Default = new() {Id = "Default Paragraph Style"};
-    public static readonly ParagraphStyleDefinitionID Heading1 = new() {Id = "Heading 1"};
-    public static readonly ParagraphStyleDefinitionID Heading2 = new() {Id = "Heading 2"};
-    public static readonly ParagraphStyleDefinitionID Heading3 = new() {Id = "Heading 3"};
-    public static readonly ParagraphStyleDefinitionID Title = new() {Id = "Title"};
+    public static readonly ParagraphStyleDefinitionID Default = new() {Id = "default-paragraph-style"};
+    public static readonly ParagraphStyleDefinitionID Heading1 = new() {Id = "heading1"};
+    public static readonly ParagraphStyleDefinitionID Heading2 = new() {Id = "heading2"};
+    public static readonly ParagraphStyleDefinitionID Heading3 = new() {Id = "heading3"};
+    public static readonly ParagraphStyleDefinitionID Title = new() {Id = "title"};
 }
 
 public class ListStyleDefinitionID : StyleDefinitionId
