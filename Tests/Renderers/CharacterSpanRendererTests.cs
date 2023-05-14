@@ -1,10 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-using BookModel.Renderers;
+﻿using BookModel.Renderers;
 using BookModel.TextDocument;
 using BookModel.TextDocument.StyleDefinitions;
 using FluentAssertions;
-using LanguageExt;
-using LanguageExt.UnitTesting;
 
 namespace Tests.Renderers;
 
@@ -61,51 +58,46 @@ public class CharacterSpanRendererTests
         actual.Should().Be(string.Empty);
     }
 
-    [Fact]
-    public static void RenderSpan_Renders_Style_With_NotEmpty_Fields()
+
+    public static IEnumerable<object[]> GetVariousFields()
     {
-        var expectedFontFamily = "FontFamilyName";
-        var expectedFontSize = 12;
-        var characterSpan = new CharacterSpan() {
-            CharacterStyle = new CharacterStyleDefinition() {
-                FontFamily = expectedFontFamily,
-                FontSize = expectedFontSize,
-            }
+        yield return new object[] {new CharacterStyleDefinition() { }, "", ""};
+        yield return new object[] {
+            new CharacterStyleDefinition() {
+                FontFamily = "expectedFontFamily",
+                FontSize = 13,
+            },
+            "expectedFontFamily",
+            "13"
         };
-        var actual = DocRenderer
-            .RenderSpan(characterSpan)
-            .Style;
-        (actual.FontFamily as string).Should().Be(expectedFontFamily);
-        (actual.FontSize as string).Should().Be(expectedFontSize.ToString());
+        yield return new object[] {
+            new CharacterStyleDefinition() {
+                FontSize = 13,
+            },
+            "",
+            "13"
+        };
+        yield return new object[] {
+            new CharacterStyleDefinition() {
+                FontFamily = "expectedFontFamily",
+            },
+            "expectedFontFamily",
+            ""
+        };
     }
-    [Fact]
-    public static void RenderSpan_Renders_Style_With_Empty_FontSize()
+
+    [Theory]
+    [MemberData(nameof(GetVariousFields))]
+    public static void RenderSpan_Renders_Style_With_VariousFieldsConfiguration(
+        CharacterStyleDefinition style, string expectedFontFamily, string expectedFontSize)
     {
-        var expectedFontFamily = "FontFamilyName";
         var characterSpan = new CharacterSpan() {
-            CharacterStyle = new CharacterStyleDefinition() {
-                FontFamily = expectedFontFamily,
-            }
+            CharacterStyle = style
         };
         var actual = DocRenderer
             .RenderSpan(characterSpan)
             .Style;
         (actual.FontFamily as string).Should().Be(expectedFontFamily);
-        (actual.FontSize as string).Should().Be(string.Empty);
-    } 
-    [Fact]
-    public static void RenderSpan_Renders_Style_With_Empty_FontFamily()
-    {
-        var expectedFontSize = 12;
-        var characterSpan = new CharacterSpan() {
-            CharacterStyle = new CharacterStyleDefinition() {
-                FontSize = expectedFontSize,
-            }
-        };
-        var actual = DocRenderer
-            .RenderSpan(characterSpan)
-            .Style;
-        (actual.FontFamily as string).Should().Be(string.Empty);
         (actual.FontSize as string).Should().Be(expectedFontSize.ToString());
     }
 }
