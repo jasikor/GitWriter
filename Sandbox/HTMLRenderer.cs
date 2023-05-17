@@ -1,7 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using BookModel.TextDocument;
+using BookModel.TextDocument.StyleDefinitions;
 using BookModel.TextDocument.Styles;
+using LanguageExt;
+using LanguageExt.Pipes;
 
 namespace Sandbox;
 
