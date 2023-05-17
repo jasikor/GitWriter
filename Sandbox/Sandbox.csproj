@@ -11,8 +11,4 @@
       <ProjectReference Include="..\BookModel\BookModel.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Stubble.Core" Version="1.10.8" />
-    </ItemGroup>
-
 </Project>
