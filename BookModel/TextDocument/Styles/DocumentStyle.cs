@@ -9,8 +9,8 @@ public record DocumentStyle
     public float SpacingAbove;
     public float SpacingBelow;
     public float LineSpacing;
-    public CharacterStyle CharacterStyle;
-    public ListStyle ListStyle;
+    public CharacterStyle CharacterStyle = new ();
+    public ListStyle ListStyle = new();
 }
 
 public static class DocumentStyleExt
