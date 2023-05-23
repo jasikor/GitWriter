@@ -5,8 +5,87 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GitWriter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow" Height="450" Width="800" WindowState="Maximized" 
+        >
+    <Grid Margin="0,17,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TreeView Grid.Row="0" Grid.Column="0" BorderThickness="0" Padding="10"   
+                  >
+            <TreeViewItem Header="Draft" IsExpanded="True">
+                <TextBlock>Introduction</TextBlock>
+                <TextBlock>Details</TextBlock>
+                <TextBlock>Conclusion</TextBlock>
+            </TreeViewItem>
+            <TreeViewItem Header="Research" IsExpanded="True">
+                <TextBlock>C# Programming</TextBlock>
+                <TextBlock>WPF Basics</TextBlock>
+                <TextBlock TextTrimming="CharacterEllipsis">Dependency Injection</TextBlock>
+            </TreeViewItem>
+            <TreeViewItem Header="Dictionary" IsExpanded="True">
+                <TextBlock>Language</TextBlock>
+                <TextBlock>Should</TextBlock>
+                <TextBlock>Keyword</TextBlock>
+            </TreeViewItem>
+        </TreeView>
+        <RichTextBox Grid.Column="1" BorderThickness="0" Padding="10" MaxWidth="500">
+            <FlowDocument>
+                <Paragraph FontSize="20" FontWeight="Bold">Introduction</Paragraph>
+                <Paragraph>This is a document to be edited with tons of thext in multiple lines and paragraphst. This is number one.</Paragraph>
+                <Paragraph>And this is paragraph number two. This is number two.</Paragraph>
+                <Paragraph>C# (pronounced "C sharp") is a powerful and versatile programming language developed by Microsoft. It was introduced in the early 2000s and has since gained popularity among developers due to its simplicity, robustness, and extensive library support. C# is an object-oriented language, which means it focuses on creating reusable code components called objects. This paradigm allows developers to build complex applications by breaking them down into smaller, more manageable pieces.
+                </Paragraph>
+                <Paragraph>
+                    One of the key strengths of C# is its integration with the .NET framework. C# is the primary language used for building applications on the .NET platform, which provides a vast array of libraries and tools for developing various types of applications, such as desktop applications, web services, and mobile apps. This integration enables developers to leverage the capabilities of the .NET framework, including its rich class library, advanced security features, and seamless interoperability with other languages like Visual Basic .NET and F#.
+                </Paragraph>
+                <Paragraph>
+                    C# offers numerous features that contribute to its efficiency and productivity. It supports modern programming concepts like generics, lambda expressions, and asynchronous programming, allowing developers to write more concise and expressive code. Additionally, C# provides a robust type system with strong type checking, helping to catch errors at compile-time rather than runtime. The language also offers features like garbage collection, automatic memory management, and exception handling, which make it easier to write reliable and stable applications.
+                </Paragraph>
+                <Paragraph>
+                    With C#, developers have access to a wide range of development tools and IDEs (Integrated Development Environments) that enhance their productivity. Microsoft's Visual Studio is the most popular IDE for C# development, offering a comprehensive set of features for coding, debugging, and testing applications. Visual Studio includes powerful code editors, project management tools, and integrated debugging capabilities, making it a preferred choice for C# developers. Moreover, there are other lightweight and open-source alternatives, such as Visual Studio Code and JetBrains Rider, which provide excellent C# development support.
+                </Paragraph>
+                <Paragraph>
+                    In summary, C# is a robust, object-oriented programming language that integrates seamlessly with the .NET framework. Its simplicity, extensive library support, and powerful tools make it a popular choice for developing a wide range of applications. With its modern features and strong type system, C# enables developers to write efficient and reliable code. Whether you're building desktop applications, web services, or mobile apps, C# provides the tools and capabilities to bring your ideas to life.
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        
+        <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Vertical" Margin="10">
+            <RichTextBox  
+                         BorderThickness="0" Background="WhiteSmoke" Padding="10"
+                         Height="300" >
+                <FlowDocument>
+                    <Paragraph>
+                        <Span>Introduces characters, places and other</Span>
+                        <Span xml:space="preserve" FontWeight="ExtraBlack" FontStyle="Italic"> important </Span>
+                        <Span>factors. And nothing more.</Span>
+                    </Paragraph>
+                </FlowDocument>
+            </RichTextBox>
+            <RichTextBox BorderThickness="0" Padding="10">
+                <FlowDocument>
+                    <Paragraph>
+                        It should be noted, that these are notes. They are long and there is more text here.
+                    </Paragraph>
+                    <List>
+                        <ListItem>
+                            <Paragraph>This is something to remember</Paragraph>
+                        </ListItem>
+                    </List>
+                    <List>
+                        <ListItem>
+                            <Paragraph>And this is something not to be forgotten</Paragraph>
+                        </ListItem>
+                    </List>
+                </FlowDocument>
+            </RichTextBox>
 
+        </StackPanel>
     </Grid>
 </Window>
