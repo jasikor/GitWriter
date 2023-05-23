@@ -14,6 +14,7 @@ public partial class App : Application
             .CreateDefaultBuilder()
             .ConfigureServices((hostContext, services) => {
                 services.AddSingleton<MainWindow>();
+                services.AddSingleton<MainWindowViewModel>();
             })
             .Build();
     }

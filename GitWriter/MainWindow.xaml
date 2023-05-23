@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GitWriter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" WindowState="Maximized" 
+        Title="{Binding BookTitle, StringFormat='GitWriter - \{0\}'}" Height="450" Width="800" WindowState="Maximized" 
         >
     <Grid Margin="0,17,0,0">
         <Grid.ColumnDefinitions>
