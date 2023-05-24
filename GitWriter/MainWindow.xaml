@@ -4,20 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GitWriter"
+        xmlns:vm="clr-namespace:GitWriter.ViewModels"
+
         mc:Ignorable="d"
-        Title="{Binding BookTitle, StringFormat='GitWriter - \{0\}'}" Height="450" Width="800" WindowState="Maximized" 
+        Height="450" Width="800" WindowState="Maximized"
+        Title="{Binding Title, StringFormat='GitWriter - \{0\}'}"
         >
+    <Window.DataContext>
+        <vm:MainViewModel />
+        
+    </Window.DataContext>
     <Grid Margin="0,17,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TreeView Grid.Row="0" Grid.Column="0" BorderThickness="0" Padding="10"   
-                  >
+        <TreeView Grid.Row="0" Grid.Column="0" BorderThickness="0" Padding="10">
             <TreeViewItem Header="Draft" IsExpanded="True">
                 <TextBlock>Introduction</TextBlock>
                 <TextBlock>Details</TextBlock>
@@ -39,7 +45,8 @@
                 <Paragraph FontSize="20" FontWeight="Bold">Introduction</Paragraph>
                 <Paragraph>This is a document to be edited with tons of thext in multiple lines and paragraphst. This is number one.</Paragraph>
                 <Paragraph>And this is paragraph number two. This is number two.</Paragraph>
-                <Paragraph>C# (pronounced "C sharp") is a powerful and versatile programming language developed by Microsoft. It was introduced in the early 2000s and has since gained popularity among developers due to its simplicity, robustness, and extensive library support. C# is an object-oriented language, which means it focuses on creating reusable code components called objects. This paradigm allows developers to build complex applications by breaking them down into smaller, more manageable pieces.
+                <Paragraph>
+                    C# (pronounced "C sharp") is a powerful and versatile programming language developed by Microsoft. It was introduced in the early 2000s and has since gained popularity among developers due to its simplicity, robustness, and extensive library support. C# is an object-oriented language, which means it focuses on creating reusable code components called objects. This paradigm allows developers to build complex applications by breaking them down into smaller, more manageable pieces.
                 </Paragraph>
                 <Paragraph>
                     One of the key strengths of C# is its integration with the .NET framework. C# is the primary language used for building applications on the .NET platform, which provides a vast array of libraries and tools for developing various types of applications, such as desktop applications, web services, and mobile apps. This integration enables developers to leverage the capabilities of the .NET framework, including its rich class library, advanced security features, and seamless interoperability with other languages like Visual Basic .NET and F#.
@@ -55,11 +62,12 @@
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-        
+
         <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Vertical" Margin="10">
-            <RichTextBox  
-                         BorderThickness="0" Background="WhiteSmoke" Padding="10"
-                         Height="300" >
+            <Button Content="Submit" Command="{Binding SubmitCommand}"/>
+            <RichTextBox
+                BorderThickness="0" Background="WhiteSmoke" Padding="10"
+                Height="300">
                 <FlowDocument>
                     <Paragraph>
                         <Span>Introduces characters, places and other</Span>

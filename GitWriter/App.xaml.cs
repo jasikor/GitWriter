@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using GitWriter.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -12,9 +13,9 @@ public partial class App : Application
     {
         AppHost = Host
             .CreateDefaultBuilder()
-            .ConfigureServices((hostContext, services) => {
+            .ConfigureServices((hostContext, services) =>
+            {
                 services.AddSingleton<MainWindow>();
-                services.AddSingleton<MainWindowViewModel>();
             })
             .Build();
     }
