@@ -2,5 +2,5 @@
 
 public record BookBinder()
 {
-    public Folder Root { get; init; } = new("Root");
+    public IList<Folder> Items { get; init; } = new List<Folder>();
 }
