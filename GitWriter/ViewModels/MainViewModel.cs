@@ -1,16 +1,27 @@
 ﻿using System;
 using System.Diagnostics;
+using BookModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GitWriter.Services;
 
 namespace GitWriter.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
-    [ObservableProperty] string _title = "Book of C# and Other Languages";
+    private readonly Book _book;
+
+    [ObservableProperty]
+    string _title;
 
     [ObservableProperty]
     string _path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Book Of CSharp";
+
+    public MainViewModel( IBookService bookService )
+    {
+        _book = bookService.GetBook();
+        _title = _book.Title;
+    }
 
     [RelayCommand]
     void Submit()

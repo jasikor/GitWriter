@@ -9,11 +9,7 @@
         mc:Ignorable="d"
         Height="450" Width="800" WindowState="Maximized"
         Title="{Binding Title, StringFormat='GitWriter - \{0\}'}"
-        >
-    <Window.DataContext>
-        <vm:MainViewModel />
-        
-    </Window.DataContext>
+        d:DataContext="{d:DesignInstance vm:MainViewModel, IsDesignTimeCreatable=True}">
     <Grid Margin="0,17,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -23,23 +19,22 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TreeView Grid.Row="0" Grid.Column="0" BorderThickness="0" Padding="10">
-            <TreeViewItem Header="Draft" IsExpanded="True">
-                <TextBlock>Introduction</TextBlock>
-                <TextBlock>Details</TextBlock>
-                <TextBlock>Conclusion</TextBlock>
-            </TreeViewItem>
-            <TreeViewItem Header="Research" IsExpanded="True">
-                <TextBlock>C# Programming</TextBlock>
-                <TextBlock>WPF Basics</TextBlock>
-                <TextBlock TextTrimming="CharacterEllipsis">Dependency Injection</TextBlock>
-            </TreeViewItem>
-            <TreeViewItem Header="Dictionary" IsExpanded="True">
-                <TextBlock>Language</TextBlock>
-                <TextBlock>Should</TextBlock>
-                <TextBlock>Keyword</TextBlock>
-            </TreeViewItem>
-        </TreeView>
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
+
+            <StackPanel.DataContext>
+                <vm:BinderViewModel />
+            </StackPanel.DataContext>
+            <TreeView Background="WhiteSmoke"
+                      BorderThickness="0" Padding="10"
+                      ItemsSource="{Binding Items}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                        <TreeViewItem Header="{Binding Title}" />
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </StackPanel>
+
         <RichTextBox Grid.Column="1" BorderThickness="0" Padding="10" MaxWidth="500">
             <FlowDocument>
                 <Paragraph FontSize="20" FontWeight="Bold">Introduction</Paragraph>
@@ -64,7 +59,7 @@
         </RichTextBox>
 
         <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Vertical" Margin="10">
-            <Button Content="Submit" Command="{Binding SubmitCommand}"/>
+            <Button Content="Submit" Command="{Binding SubmitCommand}" />
             <RichTextBox
                 BorderThickness="0" Background="WhiteSmoke" Padding="10"
                 Height="300">

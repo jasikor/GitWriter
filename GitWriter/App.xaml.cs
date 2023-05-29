@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using BookModel;
+using GitWriter.Services;
 using GitWriter.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,9 +15,13 @@ public partial class App : Application
     {
         AppHost = Host
             .CreateDefaultBuilder()
-            .ConfigureServices((hostContext, services) =>
-            {
-                services.AddSingleton<MainWindow>();
+            .ConfigureServices((hostContext, services) => {
+                services
+                    .AddSingleton<MainWindow>(s => new MainWindow() {
+                        DataContext = s.GetRequiredService<MainViewModel>()
+                    })
+                    .AddSingleton<MainViewModel>()
+                    .AddSingleton<IBookService, DummyBookService>();
             })
             .Build();
     }
