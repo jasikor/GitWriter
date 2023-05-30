@@ -19,33 +19,39 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Grid.Column="0" >
+        <Grid Grid.Row="0" Grid.Column="0">
 
             <Grid.DataContext>
                 <vm:BinderViewModel />
             </Grid.DataContext>
-            
+
             <TreeView Background="WhiteSmoke"
                       BorderThickness="0" Padding="10"
                       ItemsSource="{Binding Items}">
-                
+
                 <TreeView.InputBindings>
-                    <KeyBinding Command="{Binding DoNowCommand}" Key="Delete"/>
+                    <KeyBinding Command="{Binding DoNowCommand}" Key="Delete" />
                 </TreeView.InputBindings>
                 <TreeView.Resources>
-                    <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
-                        <Setter Property="Padding" Value="5" />
-                    </Style>
-                </TreeView.Resources>
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Title}"  />
+                    <HierarchicalDataTemplate ItemsSource="{Binding Items}" DataType="{x:Type vm:ObservableFolder}">
+                        <StackPanel Orientation="Horizontal" >
+                            <StackPanel Margin="4">
+                                <TextBlock Text="🗀" FontSize="14"></TextBlock>
+                            </StackPanel>
+                            <TextBlock Text="{Binding Title}"  FontSize="15" Padding="12 5"/>
                         </StackPanel>
                     </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
+
+                    <HierarchicalDataTemplate DataType="{x:Type vm:ObservableDocument}">
+                        <StackPanel Orientation="Horizontal" >
+                                <TextBlock Text="🗋" FontSize="18"/>
+                            <TextBlock Text="{Binding Title}" Padding="12 5" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+
+                </TreeView.Resources>
             </TreeView>
-            
+
         </Grid>
 
         <RichTextBox Grid.Column="1" BorderThickness="0" Padding="10" MaxWidth="500">
