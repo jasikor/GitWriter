@@ -19,21 +19,34 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical">
+        <Grid Grid.Row="0" Grid.Column="0" >
 
-            <StackPanel.DataContext>
+            <Grid.DataContext>
                 <vm:BinderViewModel />
-            </StackPanel.DataContext>
+            </Grid.DataContext>
+            
             <TreeView Background="WhiteSmoke"
                       BorderThickness="0" Padding="10"
                       ItemsSource="{Binding Items}">
+                
+                <TreeView.InputBindings>
+                    <KeyBinding Command="{Binding DoNowCommand}" Key="Delete"/>
+                </TreeView.InputBindings>
+                <TreeView.Resources>
+                    <Style x:Key="TreeViewItemStyle" TargetType="TreeViewItem">
+                        <Setter Property="Padding" Value="5" />
+                    </Style>
+                </TreeView.Resources>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                        <TreeViewItem Header="{Binding Title}" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Title}"  />
+                        </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-        </StackPanel>
+            
+        </Grid>
 
         <RichTextBox Grid.Column="1" BorderThickness="0" Padding="10" MaxWidth="500">
             <FlowDocument>

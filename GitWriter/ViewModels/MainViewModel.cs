@@ -17,12 +17,21 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     string _path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Book Of CSharp";
 
-    public MainViewModel( IBookService bookService )
+    public MainViewModel(IBookService bookService)
     {
         _book = bookService.GetBook();
         _title = _book.Title;
     }
 
+    public MainViewModel()
+    {
+        _book = new Book()
+        {
+            Title = "Design Time Book Title",
+            Binder = new BookModel.Binder.BookBinder()
+        };
+        _title = _book.Title;
+    }
     [RelayCommand]
     void Submit()
     {
