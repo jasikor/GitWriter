@@ -12,25 +12,40 @@ public partial class BinderViewModel : ObservableObject
     public BinderViewModel()
     {
         Items = new() {
-            new ObservableDocument() {Title = "Introduction to Microsoft C#"},
             new ObservableFolder() {
-                Title = "Chapter 1 - Basics for Beginners",
-                Items = new ObservableCollection<ObservableBinderEntry>() {
-                    new ObservableDocument() {Title = "C# Keywords and Reserved Words"},
-                    new ObservableDocument() {Title = "if Statements and Expressions"},
+                Title = "Draft",
+                Items = new() {
+                    new ObservableDocument() {
+                        Title = "Introduction to Microsoft C#"
+                    },
                     new ObservableFolder() {
-                        Title ="Loops",
+                        Title = "Basics for Beginners",
                         Items = new ObservableCollection<ObservableBinderEntry>() {
-                            
-                            new ObservableDocument() {Title = "Loops, and When to Avoid Them"},
-                            new ObservableDocument(){Title = "Advanced Loops"}
+                            new ObservableDocument() {Title = "C# Keywords and Reserved Words"},
+                            new ObservableDocument() {Title = "if Statements and Expressions"},
+                            new ObservableFolder() {
+                                Title = "Loops",
+                                Items = new ObservableCollection<ObservableBinderEntry>() {
+                                    new ObservableDocument() {Title = "Loops, and When to Avoid Them"},
+                                    new ObservableDocument() {Title = "Advanced Loops"}
+                                }
+                            }
                         }
-                    }
+                    },
+                    new ObservableFolder() {Title = "More than Basics"},
+                    new ObservableFolder() {Title = "Advanced"},
+                    new ObservableFolder() {Title = "Conclusion"},
                 }
             },
-            new ObservableFolder() {Title = "Chapter 2"},
-            new ObservableFolder() {Title = "Chapter 3"},
-            new ObservableFolder() {Title = "Conclusion"},
+            new ObservableFolder(){ Title = "Research"},
+            new ObservableFolder() {
+                Title = "Dictionary",
+                Items = new() {
+                    new ObservableDocument(){Title = "Keyword"},
+                    new ObservableDocument(){Title = "Loop"},
+                    new ObservableDocument(){Title = "Private"},
+                }
+            }
         };
     }
 
@@ -52,7 +67,4 @@ public partial class ObservableFolder : ObservableBinderEntry
     private ObservableCollection<ObservableBinderEntry> _items = new ObservableCollection<ObservableBinderEntry>();
 }
 
-public partial class ObservableDocument : ObservableBinderEntry
-{
-    
-}
+public partial class ObservableDocument : ObservableBinderEntry { }
