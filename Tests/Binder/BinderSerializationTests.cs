@@ -17,7 +17,7 @@ public class BinderSerializationTests
     [Fact]
     public static void SerializationDeserialization_Recreates_BinderWith1Item()
     {
-        var root = new List<Folder>();
+        var root = new List<BinderEntry>();
         var binder = new BookBinder {Items = root};
 
         TestSerializeDeserialize(binder);

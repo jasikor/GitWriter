@@ -12,7 +12,7 @@ public class DummyBookService : IBookService
         new() {
             Title = "The Book of C# by Art Ificial",
             Binder = new BookBinder() {
-                Items = new List<Folder>() {
+                Items = new List<BinderEntry>() {
                     new Folder("Draft") {
                         Items = new List<BinderEntry>() {
                             new DocEntry("Introduction"),

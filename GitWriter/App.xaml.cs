@@ -9,7 +9,7 @@ namespace GitWriter;
 
 public partial class App : Application
 {
-    public static IHost? AppHost { get; private set; }
+    private static IHost? AppHost { get; set; }
 
     public App()
     {
