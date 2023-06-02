@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using BookModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -7,31 +8,19 @@ namespace GitWriter.ViewModels;
 
 public partial class BinderViewModel : ObservableObject
 {
-    private readonly IObservableBinderService _binderService;
+    private readonly IBinderService _binderService;
     [ObservableProperty] private ObservableCollection<ObservableBinderEntry> _items;
 
-    public BinderViewModel(IObservableBinderService binderService)
+    public BinderViewModel(IBinderService binderService)
     {
         _binderService = binderService;
-        Items = _binderService.Get();
+        Items = BinderMapper.ToObservableCollection( _binderService.Get().Items);
     }
 
     [RelayCommand]
     private void DoNow()
     {
-        Items.Add(new ObservableDocument() {Title = "12gfgg"});
+        Items.Add(new ObservableDocument() {Title = Random.Shared.Next(1000).ToString()});
+        Items.RemoveAt(0);
     }
 }
-
-public partial class ObservableBinderEntry : ObservableObject
-{
-    [ObservableProperty] private string _title = string.Empty;
-}
-
-public partial class ObservableFolder : ObservableBinderEntry
-{
-    [ObservableProperty]
-    private ObservableCollection<ObservableBinderEntry> _items = new ObservableCollection<ObservableBinderEntry>();
-}
-
-public partial class ObservableDocument : ObservableBinderEntry { }
