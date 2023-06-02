@@ -9,7 +9,8 @@
         mc:Ignorable="d"
         Height="450" Width="800" WindowState="Maximized"
         Title="{Binding Title, StringFormat='GitWriter - \{0\}'}"
-        d:DataContext="{d:DesignInstance vm:MainViewModel, IsDesignTimeCreatable=True}">
+        d:DataContext="{d:DesignInstance vm:MainViewModel}"
+        x:Name="Window">
     <Grid Margin="0,17,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -19,32 +20,29 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Grid.Column="0">
 
-            <Grid.DataContext>
-                <vm:BinderViewModel />
-            </Grid.DataContext>
-
+        <Grid Grid.Row="0" Grid.Column="0" x:Name="BinderControl"
+              d:DataContext="{d:DesignInstance vm:BinderViewModel}">
             <TreeView Background="WhiteSmoke"
                       BorderThickness="0" Padding="10"
-                      ItemsSource="{Binding Items}">
+                      ItemsSource="{Binding Items }">
 
                 <TreeView.InputBindings>
-                    <KeyBinding Command="{Binding DoNowCommand}" Key="Delete" />
+                    <KeyBinding Command="{Binding DoNowCommand}" Key="Up"  Modifiers="Control"/>
                 </TreeView.InputBindings>
                 <TreeView.Resources>
                     <HierarchicalDataTemplate ItemsSource="{Binding Items}" DataType="{x:Type vm:ObservableFolder}">
-                        <StackPanel Orientation="Horizontal" >
+                        <StackPanel Orientation="Horizontal">
                             <StackPanel Margin="4">
                                 <TextBlock Text="🗀" FontSize="14"></TextBlock>
                             </StackPanel>
-                            <TextBlock Text="{Binding Title}"  FontSize="15" Padding="12 5"/>
+                            <TextBlock Text="{Binding Title}" FontSize="15" Padding="12 5" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
 
                     <HierarchicalDataTemplate DataType="{x:Type vm:ObservableDocument}">
-                        <StackPanel Orientation="Horizontal" >
-                                <TextBlock Text="🗋" FontSize="18"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🗋" FontSize="18" />
                             <TextBlock Text="{Binding Title}" Padding="12 5" />
                         </StackPanel>
                     </HierarchicalDataTemplate>

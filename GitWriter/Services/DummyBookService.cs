@@ -1,69 +1,23 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Documents;
 using BookModel;
-using BookModel.Binder;
+using GitWriter.ViewModels;
 
 namespace GitWriter.Services;
 
 public class DummyBookService : IBookService
 {
+    private readonly IBinderService _binderService;
+    private readonly IBookMetadataService _metadataService;
+
+    public DummyBookService(IBinderService binderService, IBookMetadataService metadataService)
+    {
+        _binderService = binderService;
+        _metadataService = metadataService;
+    }
     public Book GetBook() =>
         new() {
-            Title = "The Book of C# by Art Ificial",
-            Binder = new BookBinder() {
-                Items = new List<BinderEntry>() {
-                    new Folder("Draft") {
-                        Items = new List<BinderEntry>() {
-                            new DocEntry("Introduction"),
-                            new Folder("Chapter 1 - Basics") {
-                                Items = new List<BinderEntry>() {
-                                    new DocEntry("C# Keywords"),
-                                    new DocEntry("if Statement"),
-                                    new DocEntry("Loops"),
-                                }
-                            },
-                            new Folder("Chapter 2 - Intermediate") {
-                                Items = new List<BinderEntry>() {
-                                    new DocEntry("Classes vs Records"),
-                                    new DocEntry("The Best Loops and When To Use Them"),
-                                    new DocEntry("So What is Assembly, Anyway"),
-                                    new DocEntry("Public, Private and Assemblies"),
-                                }
-                            },
-                            new Folder("Chapter 2 - Advanced") {
-                                Items = new List<BinderEntry>() {
-                                    new DocEntry("Multitasking, Multithreding and Asynchronous"),
-                                    new DocEntry("WPF vs Maui"),
-                                    new DocEntry("Generics"),
-                                    new DocEntry("LanguageExt and Functional Programming"),
-                                }
-                            },
-                            new DocEntry("Conclusion"),
-                        }
-                    },
-                    new Folder("Research") {
-                        Items = new List<BinderEntry>() {
-                            new DocEntry("Books to be read"),
-                            new Folder("Read Books Notes") {
-                                Items = new List<BinderEntry>() {
-                                    new DocEntry("The C# Bible"),
-                                    new DocEntry("C# For Geniuses"),
-                                    new DocEntry("Functional c#"),
-                                }
-                            }
-                        }
-                    },
-                    new Folder("Dictionary") {
-                        Items = new List<BinderEntry>() {
-                            new DocEntry("abstract"),
-                            new DocEntry("DI"),
-                            new DocEntry("Maui"),
-                            new DocEntry("LINQ"),
-                            new DocEntry("WPF"),
-                        }
-                    }
-                }
-            },
+            MetaData = _metadataService.Get() ,
+            Binder = _binderService.Get(),
         };
 }

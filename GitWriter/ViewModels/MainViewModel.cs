@@ -9,7 +9,8 @@ namespace GitWriter.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
-    private readonly Book _book;
+    private readonly IBookMetadataService _metadataService;
+    private readonly BookMetadata _metadata;
 
     [ObservableProperty]
     string _title;
@@ -17,21 +18,13 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     string _path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Book Of CSharp";
 
-    public MainViewModel(IBookService bookService)
+    public MainViewModel(IBookMetadataService metadataService)
     {
-        _book = bookService.GetBook();
-        _title = _book.Title;
+        _metadataService = metadataService;
+        _metadata = metadataService.Get();
+        _title = _metadata.Title;
     }
 
-    public MainViewModel()
-    {
-        _book = new Book()
-        {
-            Title = "Design Time Book Title",
-            Binder = new BookModel.Binder.BookBinder()
-        };
-        _title = _book.Title;
-    }
     [RelayCommand]
     void Submit()
     {

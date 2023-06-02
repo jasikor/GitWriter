@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
+using BookModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -7,21 +8,29 @@ namespace GitWriter.ViewModels;
 
 public partial class BinderViewModel : ObservableObject
 {
+    private readonly IBinderService _binderService;
     [ObservableProperty] private ObservableCollection<ObservableBinderEntry> _items;
 
-    public BinderViewModel()
+    public BinderViewModel(IBinderService binderService)
     {
-        Items = new() {
+        _binderService = binderService;
+        Items = GetItems(_binderService);
+    }
+
+    private static ObservableCollection<ObservableBinderEntry> GetItems(IBinderService binderService)
+    {
+        var r = binderService.Get();
+        return new() {
             new ObservableFolder() {
                 Title = "Draft",
                 Items = new() {
                     new ObservableDocument() {
-                        Title = "Introduction to Microsoft C#"
+                        Title = "Introduction to Microsoft COBOL"
                     },
                     new ObservableFolder() {
                         Title = "Basics for Beginners",
                         Items = new ObservableCollection<ObservableBinderEntry>() {
-                            new ObservableDocument() {Title = "C# Keywords and Reserved Words"},
+                            new ObservableDocument() {Title = "COBOL Keywords and Reserved Words"},
                             new ObservableDocument() {Title = "if Statements and Expressions"},
                             new ObservableFolder() {
                                 Title = "Loops",
@@ -37,13 +46,13 @@ public partial class BinderViewModel : ObservableObject
                     new ObservableFolder() {Title = "Conclusion"},
                 }
             },
-            new ObservableFolder(){ Title = "Research"},
+            new ObservableFolder() {Title = "Research"},
             new ObservableFolder() {
                 Title = "Dictionary",
                 Items = new() {
-                    new ObservableDocument(){Title = "Keyword"},
-                    new ObservableDocument(){Title = "Loop"},
-                    new ObservableDocument(){Title = "Private"},
+                    new ObservableDocument() {Title = "Keyword"},
+                    new ObservableDocument() {Title = "Loop"},
+                    new ObservableDocument() {Title = "Private"},
                 }
             }
         };

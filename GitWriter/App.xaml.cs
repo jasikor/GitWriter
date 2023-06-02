@@ -17,10 +17,14 @@ public partial class App : Application
             .CreateDefaultBuilder()
             .ConfigureServices((hostContext, services) => {
                 services
-                    .AddSingleton<MainWindow>(s => new MainWindow() {
-                        DataContext = s.GetRequiredService<MainViewModel>()
-                    })
+                    .AddSingleton<MainWindow>(s =>
+                        new MainWindow(s.GetRequiredService<BinderViewModel>()) {
+                            DataContext = s.GetRequiredService<MainViewModel>(),
+                        })
                     .AddSingleton<MainViewModel>()
+                    .AddSingleton<BinderViewModel>()
+                    .AddSingleton<IBinderService, DummyBinderService>()
+                    .AddSingleton<IBookMetadataService, DummyMetadataService>()
                     .AddSingleton<IBookService, DummyBookService>();
             })
             .Build();
