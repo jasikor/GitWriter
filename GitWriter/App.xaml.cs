@@ -25,7 +25,8 @@ public partial class App : Application
                     .AddSingleton<BinderViewModel>()
                     .AddSingleton<IBinderService, DummyBinderService>()
                     .AddSingleton<IBookMetadataService, DummyMetadataService>()
-                    .AddSingleton<IBookService, DummyBookService>();
+                    .AddSingleton<IBookService, DummyBookService>()
+                    .AddSingleton<IObservableBinderService, ObservableBinderService>();
             })
             .Build();
     }
