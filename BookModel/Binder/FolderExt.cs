@@ -55,7 +55,13 @@ public static class FolderExt
 
     private static Folder Swap(this Folder folder, int index1, int index2)
     {
-        (folder.Items[index1], folder.Items[index2]) = (folder.Items[index2], folder.Items[index1]);
-        return folder;
+        var f = folder.Items.Select(i=>i).ToList();
+        (f[index1], f[index2]) = (f[index2], f[index1]);
+        return new Folder(folder.Title) {Items = f};
+    }
+
+    public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
+    {
+        return listToClone.Select(item => (T) item.Clone()).ToList();
     }
 }
