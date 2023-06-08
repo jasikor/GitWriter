@@ -24,10 +24,4 @@ public partial class MainViewModel : ObservableObject
         _metadata = metadataService.Get();
         _title = _metadata.Title;
     }
-
-    [RelayCommand]
-    void Submit()
-    {
-        Title = Random.Shared.Next(100).ToString();
-    }
 }
