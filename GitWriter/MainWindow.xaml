@@ -25,11 +25,9 @@
               d:DataContext="{d:DesignInstance vm:BinderViewModel}">
             <TreeView Background="WhiteSmoke"
                       BorderThickness="0" Padding="10"
-                      ItemsSource="{Binding Items }">
+                      ItemsSource="{Binding Items }"
+                            >
 
-                <TreeView.InputBindings>
-                    <KeyBinding Command="{Binding DoNowCommand}" Key="Up"  Modifiers="Control"/>
-                </TreeView.InputBindings>
                 <TreeView.Resources>
                     <HierarchicalDataTemplate ItemsSource="{Binding Items}" DataType="{x:Type vm:ObservableFolder}">
                         <StackPanel Orientation="Horizontal">
@@ -40,12 +38,12 @@
                         </StackPanel>
                     </HierarchicalDataTemplate>
 
-                    <HierarchicalDataTemplate DataType="{x:Type vm:ObservableDocument}">
+                    <DataTemplate DataType="{x:Type vm:ObservableDocument}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🗋" FontSize="18" />
                             <TextBlock Text="{Binding Title}" Padding="12 5" />
                         </StackPanel>
-                    </HierarchicalDataTemplate>
+                    </DataTemplate>
 
                 </TreeView.Resources>
             </TreeView>
