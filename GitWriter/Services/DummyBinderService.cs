@@ -29,7 +29,7 @@ public class DummyBinderService : IBinderService
                     },
                     new Folder("Chapter 2 - Advanced") {
                         Items = new List<BinderEntry>() {
-                            new DocEntry("Multitasking, Multithreding and Asynchronous"),
+                            new DocEntry("Multitasking, Multithreding, Asynchronous and Other Complicated Concepts"),
                             new DocEntry("WPF vs Maui"),
                             new DocEntry("Generics"),
                             new DocEntry("LanguageExt and Functional Programming"),
