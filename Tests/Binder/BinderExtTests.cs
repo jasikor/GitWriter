@@ -28,7 +28,7 @@ public class BinderExtTests
         ToEntryWithSubfolder(root, subfolder, subIndex)
             .Promote(subIndex, promotedIndex)
             .Should()
-            .BeEquivalentTo(ToEntryWithSubfolder(expRoot, expSubfolder, subIndex));
+            .Be(ToEntryWithSubfolder(expRoot, expSubfolder, subIndex));
     }
 
     [Theory]
@@ -41,7 +41,7 @@ public class BinderExtTests
         ToEntryWithSubfolder(root, subfolder, subIndex)
             .Demote(demotedIndex)
             .Should()
-            .BeEquivalentTo(ToEntryWithSubfolder(expRoot, expSubfolder, subIndex));
+            .Be(ToEntryWithSubfolder(expRoot, expSubfolder, subIndex));
 
     private static BinderEntry ToEntryWithSubfolder(string root, string subfolder, int subIndex)
     {

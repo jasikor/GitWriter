@@ -18,7 +18,7 @@ public static class BinderExt
         int promotedIndex)
     {
         var item = RemoveItem(entry, subFolderIndex, promotedIndex);
-        return entry.InsertOrAppend(subFolderIndex, item);
+        return entry.InsertOrAppend(subFolderIndex + 1, item);
     }
 
     private static BinderEntry RemoveItem(BinderEntry entry, int subFolderIndex, int promotedIndex)
