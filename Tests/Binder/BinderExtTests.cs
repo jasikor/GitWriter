@@ -5,7 +5,7 @@ using FluentAssertions.Collections;
 
 namespace Tests.Binder;
 
-public class FolderExtTests
+public class BinderExtTests
 {
     [Theory]
     [InlineData("Title")]
@@ -19,16 +19,16 @@ public class FolderExtTests
     [Theory]
     [InlineData("_12", "abc", 0, 0, "_a12", "bc")]
     [InlineData("_12", "abc", 0, 1, "_b12", "ac")]
-    [InlineData("_12", "abc", 0, 2, "_c12", "ac")]
+    [InlineData("_12", "abc", 0, 2, "_c12", "ab")]
     [InlineData("0_2", "abc", 1, 0, "0_a2", "bc")]
     [InlineData("01_", "abc", 2, 0, "01_a", "bc")]
     public void Promote_WorksCorrectly(string root, string subfolder, int subIndex, int promotedIndex, string expRoot,
         string expSubfolder)
     {
-        ToFolderWithSubfolder(root, subfolder, subIndex)
+        ToEntryWithSubfolder(root, subfolder, subIndex)
             .Promote(subIndex, promotedIndex)
             .Should()
-            .BeEquivalentTo(ToFolderWithSubfolder(expRoot, expSubfolder, subIndex));
+            .BeEquivalentTo(ToEntryWithSubfolder(expRoot, expSubfolder, subIndex));
     }
 
     [Theory]
@@ -38,49 +38,49 @@ public class FolderExtTests
     [InlineData("0_2", "", 1, 2, "0_", "2")]
     public void Demote_WorksCorrectly(string root, string subfolder, int subIndex, int demotedIndex, string expRoot,
         string expSubfolder) =>
-        ToFolderWithSubfolder(root, subfolder, subIndex)
+        ToEntryWithSubfolder(root, subfolder, subIndex)
             .Demote(demotedIndex)
             .Should()
-            .BeEquivalentTo(ToFolderWithSubfolder(expRoot, expSubfolder, subIndex));
+            .BeEquivalentTo(ToEntryWithSubfolder(expRoot, expSubfolder, subIndex));
 
-    private static Folder ToFolderWithSubfolder(string root, string subfolder, int subIndex)
+    private static BinderEntry ToEntryWithSubfolder(string root, string subfolder, int subIndex)
     {
-        var sub = ToFolder(subfolder);
+        var sub = ToBinderEntry(subfolder);
         var r = ToBinderEntryList(root);
         r[subIndex] = sub;
-        return new Folder("_") {Items = r};
+        return new BinderEntry("_") {Items = r};
     }
 
-    private static Folder ToFolder(string subfolder) => new Folder("_") {Items = ToBinderEntryList(subfolder)};
+    private static BinderEntry ToBinderEntry(string subfolder) => new BinderEntry("_") {Items = ToBinderEntryList(subfolder)};
 
     [Theory]
     [InlineData("123", 1, "213")]
     [InlineData("123", 2, "132")]
     [InlineData("12", 1, "21")]
     public void MoveUp_SwapsElements_WithCorrectData(string act, int index, string exp) =>
-        Move(act, index, exp, FolderExt.MoveUp);
+        Move(act, index, exp, BinderExt.MoveUp);
 
     [Theory]
     [InlineData("123", 0, "123")]
     public void MoveUp_Ignores_Index0(string act, int index, string exp) =>
-        Move(act, index, exp, FolderExt.MoveUp);
+        Move(act, index, exp, BinderExt.MoveUp);
 
     [Theory]
     [InlineData("123", 0, "213")]
     [InlineData("123", 1, "132")]
     [InlineData("12", 0, "21")]
     public void MoveDown_SwapsElements_WithCorrectData(string act, int index, string exp) =>
-        Move(act, index, exp, FolderExt.MoveDown);
+        Move(act, index, exp, BinderExt.MoveDown);
 
     [Theory]
     [InlineData("123", 2, "123")]
     [InlineData("1234", 3, "1234")]
     public void MoveDown_Ignores_LastElement(string act, int index, string exp) =>
-        Move(act, index, exp, FolderExt.MoveDown);
+        Move(act, index, exp, BinderExt.MoveDown);
 
-    private static void Move(string act, int index, string exp, Func<Folder, int, Folder> f) =>
-        f(ToFolder(act), index)
+    private static void Move(string act, int index, string exp, Func<BinderEntry, int, BinderEntry> f) =>
+        f(ToBinderEntry(act), index)
             .Should()
-            .BeEquivalentTo(ToFolder(exp),
+            .BeEquivalentTo(ToBinderEntry(exp),
                 o => o.IncludingInternalFields().WithStrictOrdering());
 }
